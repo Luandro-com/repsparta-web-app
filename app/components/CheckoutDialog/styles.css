@@ -1,0 +1,11 @@
+.wrapper {
+
+}
+.overlay {
+  width: 95%;
+  padding-top: 10px !important;
+}
+.input {
+  width: 45%;
+  margin: 0 2px;
+}

@@ -19,6 +19,11 @@ import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'react-router-scroll';
 import configureStore from './store';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/lib/sanitize.css';
@@ -48,29 +53,31 @@ const rootRoute = {
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router
-      history={history}
-      routes={rootRoute}
-      render={
-        // Scroll to top when going to a new page, imitating default browser
-        // behaviour
-        applyRouterMiddleware(
-          useScroll(
-            (prevProps, props) => {
-              if (!prevProps || !props) {
+    <MuiThemeProvider muiTheme={getMuiTheme()}>
+      <Router
+        history={history}
+        routes={rootRoute}
+        render={
+          // Scroll to top when going to a new page, imitating default browser
+          // behaviour
+          applyRouterMiddleware(
+            useScroll(
+              (prevProps, props) => {
+                if (!prevProps || !props) {
+                  return true;
+                }
+
+                if (prevProps.location.pathname !== props.location.pathname) {
+                  return [0, 0];
+                }
+
                 return true;
               }
-
-              if (prevProps.location.pathname !== props.location.pathname) {
-                return [0, 0];
-              }
-
-              return true;
-            }
+            )
           )
-        )
-      }
-    />
+        }
+      />
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById('app')
 );

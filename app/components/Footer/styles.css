@@ -1,0 +1,44 @@
+.wrapper {
+  width: 100%;
+  background-color: #EC1D24;
+  margin: -120px auto 0;
+  text-align: center;
+  position: relative;
+  top: 120px;
+  z-index: 99;
+}
+.divider {
+  width: 100%;
+  position: relative;
+  top: -2px;
+}
+.text {
+  color: #fff;
+  padding-top: 50px;
+  max-width: 75%;
+  margin: 0 auto;
+}
+.bot_divider {
+  width: 100%;
+  position: relative;
+  bottom: -20px;
+}
+.footer {
+  background-color: #FFCA05;
+  padding: 50px 0 20px;
+}
+.footer_container {
+  display: flex;
+  justify-content: space-between;
+  width: 85%;
+  margin: 0 auto;
+  text-align: left;
+}
+.facebook {
+
+}
+@media (min-width: 768px) {
+  .bot_divider {
+    bottom: -50px;
+  }
+}

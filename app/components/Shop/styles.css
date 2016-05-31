@@ -1,0 +1,62 @@
+.wrapper {
+  color: #fff;
+  background-color: #222B57;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0 0 100px;
+  width: 100%;
+}
+.divider {
+  position: relative;
+  top: -18px;
+  width: 100%;
+}
+.event {
+  position: relative;
+  top: -250px;
+  max-width: 280px;
+}
+.products {
+  max-width: 90%;
+  margin: 0 auto;
+}
+.action{
+  padding: 150px 0 0;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  height: 600px;
+  justify-content: space-around;
+}
+.banner {
+  width: 355px;
+  max-width: 100%;
+}
+.line {
+  margin: 0 auto;
+  width: 70%;
+  border: 1px solid #fff;
+}
+.total {
+  max-width: 200px;
+}
+.value {
+  font-size: 2em;
+}
+.button {
+  border: 1px solid #fff;
+  padding: 10px 25px;
+  cursor: pointer;
+}
+.button:hover {
+  background: #000;
+  border: 1px solid #000;
+}
+@media (min-width: 1024px) {
+  .divider {
+    top: -30px;
+  }
+  .action {
+    height: 900px;
+  }
+}
