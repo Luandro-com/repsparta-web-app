@@ -42,7 +42,7 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
       <div className={ styles.img }>
         <img src={featured_src} />
       </div>
-      <h4 style={{width: '15%'}}>{title}</h4>
+      <h4 className={ styles.title }>{title}</h4>
       {
         type === 'variable' &&
           <SelectField

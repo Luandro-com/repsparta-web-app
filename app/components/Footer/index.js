@@ -22,6 +22,8 @@ function Footer({footer}) {
           <a href="http://facebook.com">
             <img className={ styles.facebook } src={Facebook} />
           </a>
+          <span>© 2016 República Sparta</span>
+          <span>por Luandro</span>
         </div>
       </div>
     </div>

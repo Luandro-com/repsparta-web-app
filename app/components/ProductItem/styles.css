@@ -8,7 +8,11 @@
 }
 .img {
   display: none;
+  width: 10%;
+}
+.title {
   width: 15%;
+  text-align: left;
 }
 .stock {
   background: #0D1332;

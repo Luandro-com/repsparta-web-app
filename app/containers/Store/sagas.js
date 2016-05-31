@@ -5,6 +5,7 @@ import { saveProducts, saveDescription, saveFooter } from './actions';
 const url = process.env.URL || require('../../../config').url;
 const descriptionPostId = process.env.DESCRIPTION || require('../../../config').description;
 const footerPostId = process.env.FOOTER || require('../../../config').footer;
+const apiUrl = process.env.API || require('../../../config').api;
 
 // All sagas to be loaded
 export default [
@@ -47,7 +48,7 @@ function footerApi() {
 }
 
 function productsApi() {
-  return fetch('/api/products')
+  return fetch(apiUrl)
   .then((res) => {
     return res.json();
   })
