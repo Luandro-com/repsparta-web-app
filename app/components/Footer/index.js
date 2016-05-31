@@ -11,11 +11,11 @@ import Divider from './divider2.png';
 import BotDivider from './footer.png';
 import Facebook from './facebook.png';
 
-function Footer() {
+function Footer({footer}) {
   return (
     <div className={ styles.wrapper }>
       <img className={ styles.divider } src={Divider} />
-      <p className={ styles.text }>Cras quis nulla commodo, aliquam lectus sed, blandit augue. Cras ullamcorper bibendum bibendum. Duis tincidunt urna non pretium porta. Nam condimentum vitae ligula vel ornare. Phasellus at semper turpis. Nunc eu tellus tortor. Etiam at condimentum nisl, vitae sagittis orci. Donec id dignissim nunc.</p>
+      <p className={ styles.text }>{ footer }</p>
       <img className={ styles.bot_divider } src={BotDivider} />
       <div className={ styles.footer }>
         <div className={ styles.footer_container }>

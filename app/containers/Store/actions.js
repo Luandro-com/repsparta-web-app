@@ -7,6 +7,7 @@
 import {
   FETCH_DESCRIPTION, SAVE_DESCRIPTION,
   FETCH_PRODUCTS, SAVE_PRODUCTS,
+  FETCH_FOOTER, SAVE_FOOTER,
   CREATE_ORDER
 } from './constants';
 
@@ -28,12 +29,29 @@ export function postOrder(info) {
    };
  }
 
- export function saveDescription(description) {
+ export function saveDescription(description, eventImg) {
    return {
      type: SAVE_DESCRIPTION,
-     payload: description
+     payload: { description, eventImg }
    };
  }
+
+ /**
+  * Footer
+  */
+  export function fetchFooter() {
+    console.log('returning');
+    return {
+      type: FETCH_FOOTER,
+    };
+  }
+
+  export function saveFooter(text) {
+    return {
+      type: SAVE_FOOTER,
+      payload: text
+    };
+  }
 
 /**
  * Products

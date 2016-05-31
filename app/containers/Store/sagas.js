@@ -1,19 +1,42 @@
 import 'whatwg-fetch';
-import { FETCH_PRODUCTS, FETCH_DESCRIPTION } from './constants';
+import { FETCH_PRODUCTS, FETCH_DESCRIPTION, FETCH_FOOTER } from './constants';
 import { take, call, put, select } from 'redux-saga/effects';
-import { saveProducts, saveDescription } from './actions';
+import { saveProducts, saveDescription, saveFooter } from './actions';
 const url = process.env.URL || require('../../../config').url;
-const descriptionPageId = process.env.DESCRIPTION || require('../../../config').description;
+const descriptionPostId = process.env.DESCRIPTION || require('../../../config').description;
+const footerPostId = process.env.FOOTER || require('../../../config').footer;
+
 // All sagas to be loaded
 export default [
   getProducts,
   getDescription,
+  getFooter,
 ];
 /**
  * API
  */
 function descriptionApi() {
-  return fetch(`${url}/wp-json/wp/v2/pages/${descriptionPageId}`)
+  return fetch(`${url}/wp-json/wp/v2/posts/${descriptionPostId}`)
+  .then((res) => {
+    return res.json();
+  })
+  .catch((err) => {
+    console.log(err);
+    return err;
+  })
+}
+function eventImageApi(mediaId) {
+  return fetch(`${url}/wp-json/wp/v2/media/${mediaId}`)
+  .then((res) => {
+    return res.json();
+  })
+  .catch((err) => {
+    console.log(err);
+    return err;
+  })
+}
+function footerApi() {
+  return fetch(`${url}/wp-json/wp/v2/posts/${footerPostId}`)
   .then((res) => {
     return res.json();
   })
@@ -51,7 +74,20 @@ export function* getDescription() {
     yield take(FETCH_DESCRIPTION);
     const description = yield call(descriptionApi);
     if(description) {
-      yield put(saveDescription(description.content.rendered))
+      const img = yield call(eventImageApi, description.featured_media);
+      if(img) {
+        yield put(saveDescription(description.content.rendered, img.source_url));
+      }
+    }
+  }
+}
+export function* getFooter() {
+  while(true) {
+    yield take(FETCH_FOOTER);
+    const footer = yield call(footerApi);
+    console.log(footer);
+    if(footer) {
+      yield put(saveFooter(footer));
     }
   }
 }

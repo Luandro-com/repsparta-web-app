@@ -62,12 +62,6 @@ function CheckoutDialog({ close, handlePrev, handleNext, handleCCFocus, handleCC
         primary={true}
         onTouchTap={close}
       />,
-      <FlatButton
-        label="Enviar"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={close}
-      />,
     ];
   let cart = [];
   products.map((item, key) => {
@@ -140,6 +134,7 @@ function CheckoutDialog({ close, handlePrev, handleNext, handleCCFocus, handleCC
               <StepLabel>Dados do comprador</StepLabel>
               <StepContent>
                 <Card
+                  expiry={props.cc_date}
                   number={props.cc_number}
                   cvc={props.cc_cvc}
                   name={props.cc_name}

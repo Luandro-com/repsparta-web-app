@@ -12,7 +12,6 @@ import CheckoutDialog from 'components/CheckoutDialog';
 
 import styles from './styles.css';
 import Divider from './divider1.png';
-import Event from './NICO.png';
 import Action from './garanta-ja.png';
 import Total from './total.png';
 
@@ -169,8 +168,11 @@ class Shop extends React.Component {
   }
 
   render() {
-    const { products, postOrder } = this.props;
-    let ProductList;
+    const { products, postOrder, eventImg } = this.props;
+    let ProductList, eventImgHolder;
+    eventImg
+      ? eventImgHolder = <img className={ styles.event } src={eventImg} />
+      : eventImgHolder = <Loader />
     products.length > 0
       ? ProductList = (
         <div className={ styles.products }>
@@ -191,7 +193,7 @@ class Shop extends React.Component {
     return (
       <div className={ styles.wrapper }>
         <img className={ styles.divider } src={Divider} />
-        <img className={ styles.event } src={Event} />
+        { eventImgHolder }
         { ProductList }
         <div className={ styles.action }>
           <img className={ styles.banner} src={Action} />

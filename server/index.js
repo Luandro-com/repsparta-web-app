@@ -22,14 +22,6 @@ const WooCommerce = new WooCommerceAPI({
   consumerKey: configConsumerKey,
   consumerSecret: configConsumerSecret,
 });
-/**
- * Description API
- */
-app.get('/api/description', (req, res) => {
-  WooCommerce.get('pages/56', (err, data, response) => {
-    console.log(response);
-  })
-})
 
 /**
  * Products API

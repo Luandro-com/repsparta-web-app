@@ -12,6 +12,9 @@
   width: 100%;
 }
 .event {
+  background: #fff;
+  border-radius: 50%;
+  padding: 15px;
   position: relative;
   top: -250px;
   max-width: 280px;

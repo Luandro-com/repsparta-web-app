@@ -29,9 +29,21 @@ const selectDescription = () => createSelector(
   (globalState) => globalState.get('description')
 );
 
+const selectEventImg = () => createSelector(
+  selectStoreDomain(),
+  (globalState) => globalState.get('eventImg')
+);
+
+const selectFooter = () => createSelector(
+  selectStoreDomain(),
+  (globalState) => globalState.get('footer')
+);
+
 export default selectStore;
 export {
   selectStoreDomain,
   selectProducts,
-  selectDescription
+  selectDescription,
+  selectEventImg,
+  selectFooter
 };
