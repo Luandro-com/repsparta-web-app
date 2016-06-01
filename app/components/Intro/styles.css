@@ -16,7 +16,8 @@
   padding: 50px 0;
 }
 .title {
-  max-width: 300px;
+  min-width: 300px;
+  /*max-width: 95%;*/
   padding: 50px 0;
 }
 .description {
