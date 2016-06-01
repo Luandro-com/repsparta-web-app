@@ -1,15 +1,15 @@
 {
-  "name": "react-boilerplate",
-  "version": "3.0.0",
+  "name": "repsparta",
+  "version": "0.0.9",
   "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mxstbr/react-boilerplate.git"
+    "url": "git://github.com/luandro-com/repsparta-web-app.git"
   },
-  "author": "Max Stoiber",
+  "author": "Luandro Vieira",
   "license": "MIT",
   "scripts": {
-    "s3": "npm run build && s3-cli sync -P --delete-removed ./build s3://repsparta.com",
+    "s3": "npm run build && aws s3 sync ./build s3://repsparta.com/ --region sa-east-1",
     "deploy": "npm run build && ",
     "prebuild": "npm run build:clean",
     "build:clean": "rimraf ./build/*",
