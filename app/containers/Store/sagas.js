@@ -48,7 +48,18 @@ function footerApi() {
 }
 
 function productsApi() {
-  return fetch(apiUrl)
+  return fetch(`${apiUrl}/products`)
+  .then((res) => {
+    return res.json();
+  })
+  .catch((err) => {
+    console.log(err);
+    return err;
+  })
+}
+
+function ordersApi() {
+  return fetch(`${apiUrl}/order`)
   .then((res) => {
     return res.json();
   })
