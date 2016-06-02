@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import Radium from 'radium';
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -14,24 +15,31 @@ import styles from './styles.css';
 const sty = {
   select: {
     background: '#fff',
-    padding: '31px 15px',
-    textAlign: 'center',
-    borderRadius: 35,
-    width: '75%'
+    width: '75%',
+    '@media (min-width: 720px)': {
+        width: '50%',
+        padding: '31px 15px',
+        borderRadius: 35,
+        textAlign: 'center',
+      }
   },
   underline: {
     display: 'none'
   },
   label: {
-    top: -24,
     color: '#0D1332',
-    paddingRight: 88,
+    '@media (min-width: 720px)': {
+      top: -24,
+      paddingRight: 88,
+    }
   },
   icon: {
-    top: -18,
-    width: 40,
-    height: 40,
     fill: '#0D1332',
+    '@media (min-width: 720px)': {
+      top: -18,
+      width: 40,
+      height: 40,
+    }
   }
 }
 
@@ -39,15 +47,14 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
   function createMarkup() { return {__html: price_html}; };
   return (
     <div className={ styles.wrapper }>
-      <div className={ styles.img }>
-        <img src={featured_src} />
+      <div className={ styles.id }>
+        <img className={ styles.img } src={featured_src} />
+        <h4 className={ styles.title }>{title}</h4>
       </div>
-      <h4 className={ styles.title }>{title}</h4>
       <div className={ styles.info }>
         {
           type === 'variable' &&
             <SelectField
-              className={ styles.select }
               value={ selected }
               onChange={ change }
               iconStyle={ sty.icon }
@@ -66,7 +73,7 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
           type === 'simple' &&
           <div className={ styles.simple_container }>
             <div className={ styles.simple_product }>
-              {stock_quantity}
+              {stock_quantity} restantes
             </div>
           </div>
         }
@@ -95,5 +102,6 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
     </div>
   );
 }
+ProductItem = Radium(ProductItem);
 
 export default ProductItem;

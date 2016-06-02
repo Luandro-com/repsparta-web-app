@@ -323,18 +323,18 @@ class Shop extends React.Component {
       : ProductList = <Loader />
     total > 0
       ? finish = <button className={ styles.button } onClick={this.handleClick}>Finalizar Compra</button>
-      : finish = <h1>Adicione um produto no carrinho para começar</h1>
+      : finish = <h1 className={ styles.addItem }>Adicione um produto no carrinho para começar</h1>
     return (
       <div className={ styles.wrapper }>
         <img className={ styles.divider } src={Divider} />
         { eventImgHolder }
         { ProductList }
         <div className={ styles.action }>
-          <img className={ styles.banner} src={Action} />
-          <hr className={ styles.line } />
           <img className={ styles.total } src={Total} />
+          <hr className={ styles.line } />
           <h2 className={ styles.value }>R${this.state.total},00</h2>
           { finish }
+          <img className={ styles.banner} src={Action} />
         </div>
         <CheckoutDialog
           props={this.state}

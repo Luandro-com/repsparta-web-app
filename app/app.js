@@ -19,6 +19,7 @@ import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import useScroll from 'react-router-scroll';
 import configureStore from './store';
+import { StyleRoot } from 'radium';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 const muiTheme = getMuiTheme({
@@ -71,31 +72,33 @@ const rootRoute = {
 
 ReactDOM.render(
   <Provider store={store}>
-    <MuiThemeProvider muiTheme={muiTheme}>
-      <Router
-        history={history}
-        routes={rootRoute}
-        render={
-          // Scroll to top when going to a new page, imitating default browser
-          // behaviour
-          applyRouterMiddleware(
-            useScroll(
-              (prevProps, props) => {
-                if (!prevProps || !props) {
+    <StyleRoot>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <Router
+          history={history}
+          routes={rootRoute}
+          render={
+            // Scroll to top when going to a new page, imitating default browser
+            // behaviour
+            applyRouterMiddleware(
+              useScroll(
+                (prevProps, props) => {
+                  if (!prevProps || !props) {
+                    return true;
+                  }
+
+                  if (prevProps.location.pathname !== props.location.pathname) {
+                    return [0, 0];
+                  }
+
                   return true;
                 }
-
-                if (prevProps.location.pathname !== props.location.pathname) {
-                  return [0, 0];
-                }
-
-                return true;
-              }
+              )
             )
-          )
-        }
-      />
-    </MuiThemeProvider>
+          }
+        />
+      </MuiThemeProvider>
+    </StyleRoot>
   </Provider>,
   document.getElementById('app')
 );

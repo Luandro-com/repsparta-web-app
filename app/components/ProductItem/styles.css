@@ -1,19 +1,23 @@
 .wrapper {
   padding: 25px 0;
-  text-align: center;;
+  text-align: center;
+}
+.id {
+  display: flex;
+  align-items: center;
+  flex-flow: row nowrap;
+  padding: 15px 0;
 }
 .img {
-  display: none;
-  width: 10%;
+  padding-right: 10px;
 }
 .title {
-  width: 100%;
   text-align: left;
+  text-transform: uppercase;
 }
 .info {
   display: flex;
 }
-
 .stock {
   background: #0D1332;
   padding: 14px 15px;
@@ -30,16 +34,13 @@
 
 }
 .simple_container {
-  width: 75%;
 }
 .simple_product {
   text-align: center;
   font-size: 1.5em;
-  border-radius: 50%;
   padding: 5px;
-  width: 50px;
-  background: #fff;
-  color: #222B57;
+  border: 1px solid #fff;
+  color: #fff;
   margin: 0 auto;
 }
 .stock_text {
@@ -48,6 +49,7 @@
 .price {
   width: 5%;
   text-align: center;
+  font-size: 1.5em;
 }
 .counter {
   width: 5%;
@@ -76,6 +78,11 @@
 .minus {
   background-color: #FFCA05;
 }
+.price {
+  padding: 25px 0;
+  width: 100%;
+  border-bottom: 1px solid #ff0;
+}
 
 @media (min-width: 560px) {
   .wrapper {
@@ -87,13 +94,9 @@
   }
   .title {
     width: 15%;
-    flex-grow: 2;
   }
   .img {
     display: block;
-  }
-  .select {
-    width: 35%;
   }
   .price {
     width: 15%;
@@ -106,6 +109,11 @@
   .info {
     width: 35%;
   }
+  .simple_product {
+    border-radius: 50%;
+    width: 50px;
+  }
+
 }
 @media (min-width: 1024px) {
   .info {

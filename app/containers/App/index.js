@@ -12,9 +12,10 @@
  */
 
 import React from 'react';
+import Radium, { Style } from 'radium'
 
 /* eslint-disable react/prefer-stateless-function */
-export default class App extends React.Component {
+class App extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.node,
@@ -23,8 +24,17 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
+        <Style
+          scopeSelector="body"
+          rules={{
+            fontFamily: 'Roboto',
+          }}
+          />
         {this.props.children}
       </div>
     );
   }
 }
+
+App = Radium(App)
+export default App;

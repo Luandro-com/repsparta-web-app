@@ -8,7 +8,7 @@
 }
 .divider {
   position: relative;
-  top: -18px;
+  top: -10px;
   width: 100%;
 }
 .event {
@@ -16,20 +16,20 @@
   border-radius: 50%;
   padding: 15px;
   position: relative;
-  top: -250px;
-  max-width: 280px;
+  top: -150px;
+  max-width: 60%;
 }
 .products {
   max-width: 90%;
   margin: 0 auto;
 }
 .action{
-  padding: 150px 0 0;
+  padding: 30px 0 0;
   display: flex;
-  flex-flow: column;
-  align-items: center;
-  height: 600px;
+  flex-direction: column;
   justify-content: space-around;
+  align-items: center;
+  height: 200%;
 }
 .banner {
   width: 355px;
@@ -42,24 +42,50 @@
 }
 .total {
   max-width: 200px;
+  margin: 25% 0 10%;
+
 }
 .value {
   font-size: 2em;
+  margin: 10% 0;
 }
 .button {
   border: 1px solid #fff;
-  padding: 10px 25px;
+  padding: 20px 40px;
+  margin: 10% 0 30%;
   cursor: pointer;
 }
 .button:hover {
   background: #000;
   border: 1px solid #000;
 }
+.addItem {
+  margin: 10% 0 30%;
+}
+@media (min-width: 720px) {
+  .divider {
+    top: -18px;
+  }
+}
+
 @media (min-width: 1024px) {
   .divider {
     top: -30px;
   }
-  .action {
-    height: 900px;
+}
+@media (min-width: 1440px) {
+  .event {
+    top: -330px;
+  }
+  .divider {
+    top: -33px;
+  }
+}
+@media (min-width: 2040px) {
+  .event {
+    top: -390px;
+  }
+  .divider {
+    top: -60px;
   }
 }
