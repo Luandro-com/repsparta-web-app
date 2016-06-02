@@ -40,7 +40,6 @@ export function postOrder(userInfo, cart) {
   * Footer
   */
   export function fetchFooter() {
-    console.log('returning');
     return {
       type: FETCH_FOOTER,
     };

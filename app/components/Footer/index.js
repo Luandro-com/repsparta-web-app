@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import Loader from 'halogen/PulseLoader';
 
 import styles from './styles.css';
 import Divider from './divider2.png';
@@ -12,10 +13,17 @@ import BotDivider from './footer.png';
 import Facebook from './facebook.png';
 
 function Footer({footer}) {
+  function createMarkup() { return {__html: footer}; };
+  let main;
+  footer !== null
+    ? main = <div
+      className={ styles.text }
+      dangerouslySetInnerHTML={createMarkup()} />
+    : main = <div className={ styles.text }><Loader /></div>
   return (
     <div className={ styles.wrapper }>
       <img className={ styles.divider } src={Divider} />
-      <p className={ styles.text }>{ footer }</p>
+      { main }
       <img className={ styles.bot_divider } src={BotDivider} />
       <div className={ styles.footer }>
         <div className={ styles.footer_container }>
@@ -25,7 +33,7 @@ function Footer({footer}) {
           <span>© 2016 República Sparta</span>
           <a href="http://luandro.com">
             <span>por Luandro</span>
-          </a>  
+          </a>
         </div>
       </div>
     </div>

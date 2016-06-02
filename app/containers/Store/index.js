@@ -17,10 +17,10 @@ import Footer from 'components/Footer';
 export class Store extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   componentDidMount() {
-    const { fetchProducts, fetchDescription } = this.props;
+    const { fetchProducts, fetchDescription, fetchFooter } = this.props;
+    fetchFooter();
     fetchProducts();
     fetchDescription();
-    fetchFooter();
   }
 
   render() {

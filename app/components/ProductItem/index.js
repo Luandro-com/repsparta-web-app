@@ -13,11 +13,11 @@ import styles from './styles.css';
 
 const sty = {
   select: {
-    width: '35%',
     background: '#fff',
     padding: '31px 15px',
     textAlign: 'center',
     borderRadius: 35,
+    width: '75%'
   },
   underline: {
     display: 'none'
@@ -43,52 +43,55 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
         <img src={featured_src} />
       </div>
       <h4 className={ styles.title }>{title}</h4>
-      {
-        type === 'variable' &&
-          <SelectField
-            value={ selected }
-            onChange={ change }
-            iconStyle={ sty.icon }
-            labelStyle={ sty.label }
-            underlineStyle={ sty.underline }
-            style={ sty.select }>
-            <MenuItem value={1} primaryText='República...' />
-            {variations.map((item, key) => <MenuItem
-              value={item.attributes[0].option}
-              key={key}
-              primaryText={item.attributes[0].option}>
-              </MenuItem> )}
-          </SelectField>
-      }
-      {
-        type === 'simple' &&
-        <div style={{width: '35%'}}>
-          <div className={ styles.simple_product }>
-            {stock_quantity}
+      <div className={ styles.info }>
+        {
+          type === 'variable' &&
+            <SelectField
+              className={ styles.select }
+              value={ selected }
+              onChange={ change }
+              iconStyle={ sty.icon }
+              labelStyle={ sty.label }
+              underlineStyle={ sty.underline }
+              style={ sty.select }>
+              <MenuItem value={1} primaryText='República...' />
+              {variations.map((item, key) => <MenuItem
+                value={item.attributes[0].option}
+                key={key}
+                primaryText={item.attributes[0].option}>
+                </MenuItem> )}
+            </SelectField>
+        }
+        {
+          type === 'simple' &&
+          <div className={ styles.simple_container }>
+            <div className={ styles.simple_product }>
+              {stock_quantity}
+            </div>
+          </div>
+        }
+        {
+          selected !== 1 &&
+          <div className={ styles.stock }>
+            {
+              variations
+              .filter((item) => item.attributes[0].option === selected)
+              .map((res, key) => <span key={key} className={ styles.stock_num}>{res.stock_quantity}</span>)
+            }
+            <span className={ styles.stock_text }>vagas</span>
+          </div>
+        }
+        <div className={ styles.counter }>
+          <span className={ styles.num }>{ counter }</span>
+          <div className={ styles.buttons }>
+            <span className={ styles.plus } onClick={inc}>+</span>
+            <span className={ styles.minus } onClick={dec}>-</span>
           </div>
         </div>
-      }
-      {
-        selected !== 1 &&
-        <div className={ styles.stock }>
-          {
-            variations
-            .filter((item) => item.attributes[0].option === selected)
-            .map((res, key) => <span key={key} className={ styles.stock_num}>{res.stock_quantity}</span>)
-          }
-          <span className={ styles.stock_text }>vagas</span>
-        </div>
-      }
+      </div>
       <h3
       className={ styles.price }
       dangerouslySetInnerHTML={createMarkup()}/>
-      <div className={ styles.counter }>
-        <span className={ styles.num }>{ counter }</span>
-        <div className={ styles.buttons }>
-          <span className={ styles.plus } onClick={inc}>+</span>
-          <span className={ styles.minus } onClick={dec}>-</span>
-        </div>
-      </div>
     </div>
   );
 }

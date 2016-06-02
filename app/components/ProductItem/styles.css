@@ -1,19 +1,19 @@
 .wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  padding: 15px 0;
-  text-align: left;
+  padding: 25px 0;
+  text-align: center;;
 }
 .img {
   display: none;
   width: 10%;
 }
 .title {
-  width: 15%;
+  width: 100%;
   text-align: left;
 }
+.info {
+  display: flex;
+}
+
 .stock {
   background: #0D1332;
   padding: 14px 15px;
@@ -28,6 +28,9 @@
 }
 .stock_num {
 
+}
+.simple_container {
+  width: 75%;
 }
 .simple_product {
   text-align: center;
@@ -75,14 +78,39 @@
 }
 
 @media (min-width: 560px) {
+  .wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    text-align: left;
+  }
+  .title {
+    width: 15%;
+    flex-grow: 2;
+  }
   .img {
     display: block;
+  }
+  .select {
+    width: 35%;
   }
   .price {
     width: 15%;
   }
 }
+@media (min-width: 768px) {
+  .img {
+    width: 20%;
+  }
+  .info {
+    width: 35%;
+  }
+}
 @media (min-width: 1024px) {
+  .info {
+    width: 40%;
+  }
   .stock {
     left: -160px;
     width: 80px;

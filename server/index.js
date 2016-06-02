@@ -13,7 +13,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 const configAdminUrl = process.env.ADMINURL || require('../config').adminUrl;
-const configUrl = process.env.URL || require('../config').url;
 const configConsumerKey = process.env.CONSUMERKEY || require('../config').consumerKey;
 const configConsumerSecret = process.env.CONSUMERSECRET || require('../config').consumerSecret;
 
@@ -43,6 +42,11 @@ app.get('/api/latests', (req, res) => {
  * Products API
  */
 app.get('/api/products', (req, res) => {
+  console.log(WooCommerce);
+  console.log(configAdminUrl);
+  console.log(configConsumerKey);
+  console.log(configConsumerSecret);
+
   WooCommerce.get('products', (err, data, response) => {
     if(data.statusCode === 200) {
       const formatedData = JSON.parse(response)

@@ -149,7 +149,7 @@ function ordersApi(data) {
      console.log(action.payload);
      const order = yield call(ordersApi, action.payload);
      if(order.ok) {
-      // window.location = `${adminUrl}/checkout/order-pay/${order.order_number}/?pay_for_order=true&key=${order.order_key}`;
+      window.location = `${adminUrl}/checkout/order-pay/${order.order_number}/?pay_for_order=true&key=${order.order_key}`;
      }
    }
  }
@@ -178,9 +178,8 @@ export function* getFooter() {
   while(true) {
     yield take(FETCH_FOOTER);
     const footer = yield call(footerApi);
-    console.log(footer);
     if(footer) {
-      yield put(saveFooter(footer));
+      yield put(saveFooter(footer.content.rendered));
     }
   }
 }
