@@ -14,10 +14,10 @@ import {
 /**
  * Order
  */
-export function postOrder(info) {
+export function postOrder(userInfo, cart) {
   return {
     type: CREATE_ORDER,
-    payload: info
+    payload: {userInfo, cart}
   }
 }
 /**

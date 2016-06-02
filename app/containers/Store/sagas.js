@@ -1,8 +1,8 @@
 import 'whatwg-fetch';
-import { FETCH_PRODUCTS, FETCH_DESCRIPTION, FETCH_FOOTER } from './constants';
+import { FETCH_PRODUCTS, FETCH_DESCRIPTION, FETCH_FOOTER, CREATE_ORDER } from './constants';
 import { take, call, put, select } from 'redux-saga/effects';
 import { saveProducts, saveDescription, saveFooter } from './actions';
-const url = process.env.URL || require('../../../config').url;
+const adminUrl = process.env.ADMINURL || require('../../../config').adminUrl;
 const descriptionPostId = process.env.DESCRIPTION || require('../../../config').description;
 const footerPostId = process.env.FOOTER || require('../../../config').footer;
 const apiUrl = process.env.API || require('../../../config').api;
@@ -12,12 +12,13 @@ export default [
   getProducts,
   getDescription,
   getFooter,
+  createOrder
 ];
 /**
  * API
  */
 function descriptionApi() {
-  return fetch(`${url}/wp-json/wp/v2/posts/${descriptionPostId}`)
+  return fetch(`${adminUrl}/wp-json/wp/v2/posts/${descriptionPostId}`)
   .then((res) => {
     return res.json();
   })
@@ -27,7 +28,7 @@ function descriptionApi() {
   })
 }
 function eventImageApi(mediaId) {
-  return fetch(`${url}/wp-json/wp/v2/media/${mediaId}`)
+  return fetch(`${adminUrl}/wp-json/wp/v2/media/${mediaId}`)
   .then((res) => {
     return res.json();
   })
@@ -37,7 +38,7 @@ function eventImageApi(mediaId) {
   })
 }
 function footerApi() {
-  return fetch(`${url}/wp-json/wp/v2/posts/${footerPostId}`)
+  return fetch(`${adminUrl}/wp-json/wp/v2/posts/${footerPostId}`)
   .then((res) => {
     return res.json();
   })
@@ -58,8 +59,57 @@ function productsApi() {
   })
 }
 
-function ordersApi() {
-  return fetch(`${apiUrl}/order`)
+function ordersApi(data) {
+  const { first_name, last_name, email, phone, street, city, state, cep, cpf, number} = data.userInfo;
+  console.log(data.userInfo);
+  let cart = [];
+  data.cart.map((item) => {
+    const { price, name, product_id, quantity, meta} = item;
+    cart.push({
+     id: product_id,
+     subtotal: price,
+     total: price,
+     price,
+     quantity,
+     name,
+     product_id,
+     meta
+   })
+  })
+  const formatedData = {
+    order: {
+     payment_details: {
+       method_id: 'pagseguro',
+       method_title: 'PagSeguro',
+       paid: false
+     },
+     billing_address: {
+       first_name,
+       last_name,
+       email,
+       phone,
+       address_1: street,
+       city,
+       state,
+       postcode: cep,
+       country: "BR",
+       persontype: "F",
+       cpf,
+       sex: false,
+       number,
+      },
+     line_items: cart
+   }
+  }
+  console.log('BODY', JSON.stringify(formatedData));
+  return fetch(`${apiUrl}/order`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formatedData)
+  })
   .then((res) => {
     return res.json();
   })
@@ -72,6 +122,15 @@ function ordersApi() {
 /**
  * SAGAS
  */
+ export function* createOrder() {
+   while(true) {
+     const action = yield take(CREATE_ORDER);
+     const order = yield call(ordersApi, action.payload);
+     if(order.ok) {
+      // window.location = `${adminUrl}/checkout/order-pay/${order.order_number}/?pay_for_order=true&key=${order.order_key}`;
+     }
+   }
+ }
 export function* getProducts() {
   while(true) {
     yield take(FETCH_PRODUCTS);

@@ -9,7 +9,6 @@ import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import TextField from 'material-ui/TextField';
 import {
   Step,
@@ -31,8 +30,15 @@ const sty={
   }
 }
 
-function CheckoutDialog({ close, handlePrev, handleNext, handleCCFocus, handleCCName, handleCCNumber, handleCCcvc, handleCCDate, postOrder, products, props }) {
-  const { open, finished, stepIndex } = props;
+function CheckoutDialog({
+    close, handlePrev, handleNext, handleSubmit,
+    handleCep, handleCpf, handleFirstName, handleLastName, handlePhone, handleNumber, handleEmail, handleStreet,
+    products, props
+  }) {
+  const {
+    open, finished, stepIndex,
+    first_name, last_name, email, phone, number, cpf, cep, street
+  } = props;
   function renderStepActions(step) {
     return (
       <div style={{margin: '12px 0'}}>
@@ -41,7 +47,7 @@ function CheckoutDialog({ close, handlePrev, handleNext, handleCCFocus, handleCC
           disableTouchRipple={true}
           disableFocusRipple={true}
           primary={true}
-          onTouchTap={handleNext}
+          onTouchTap={props.stepIndex === 2 ? handleSubmit : handleNext}
           style={{marginRight: 12}}
         />
         {step > 0 && (
@@ -74,7 +80,7 @@ function CheckoutDialog({ close, handlePrev, handleNext, handleCCFocus, handleCC
         </TableRow>
       )
     }
-  })
+  });
   return (
     <div className={ styles.wrapper }>
       <Dialog
@@ -90,6 +96,83 @@ function CheckoutDialog({ close, handlePrev, handleNext, handleCCFocus, handleCC
             <Step>
               <StepLabel>Confirme lista de compras</StepLabel>
               <StepContent>
+                <TextField
+                  style={ sty.input }
+                  hintText="José"
+                  floatingLabelText="Primeiro nome"
+                  type="text"
+                  onChange={handleFirstName}
+                  value={props.first_name}
+                />
+                <TextField
+                  style={ sty.input }
+                  hintText="Rodriguez"
+                  floatingLabelText="Sobrenome"
+                  type="text"
+                  onChange={handleLastName}
+                  value={props.last_name}
+                />
+                <TextField
+                  style={ sty.input }
+                  hintText="jose_rod@repsparta.com"
+                  floatingLabelText="E-mail"
+                  type="text"
+                  onChange={handleEmail}
+                  value={props.email}
+                />
+                <TextField
+                  style={ sty.input }
+                  hintText="123.456.789-10"
+                  floatingLabelText="CPF"
+                  type="text"
+                  onChange={handleCpf}
+                  value={props.cpf}
+                />
+
+                {renderStepActions(0)}
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>Dados para contato</StepLabel>
+              <StepContent>
+                  <TextField
+                    style={ sty.input }
+                    hintText="36570-000"
+                    floatingLabelText="CEP"
+                    type="text"
+                    onChange={handleCep}
+                    value={props.cep}
+                  />
+                  <TextField
+                    style={ sty.input }
+                    hintText="(31) 99787-2928"
+                    floatingLabelText="Telefone"
+                    type="text"
+                    onChange={handlePhone}
+                    value={props.phone}
+                  />
+                  <TextField
+                    style={ sty.input }
+                    hintText="Rua dos Eucaliptos"
+                    floatingLabelText="Rua"
+                    type="text"
+                    onChange={handleStreet}
+                    value={props.street}
+                  />
+                  <TextField
+                    style={ sty.input }
+                    hintText="13"
+                    floatingLabelText="number"
+                    type="text"
+                    onChange={handleNumber}
+                    value={props.number}
+                  />
+                  {renderStepActions(1)}
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel>Dados do comprador</StepLabel>
+              <StepContent>
                 <Table selectable={false}>
                   <TableBody displayRowCheckbox={false}>
                     { cart }
@@ -102,83 +185,6 @@ function CheckoutDialog({ close, handlePrev, handleNext, handleCCFocus, handleCC
                     }
                   </TableBody>
                 </Table>
-                {renderStepActions(0)}
-              </StepContent>
-            </Step>
-            <Step>
-              <StepLabel>Escolha método de pagamento</StepLabel>
-              <StepContent>
-                <RadioButtonGroup
-                  name="Checkout"
-                  defaultSelected="cc">
-                    <RadioButton
-                      value="cc"
-                      label="Cartão de Crédito"
-                      style={styles.radioButton}
-                    />
-                    <RadioButton
-                      value="tb"
-                      label="Transferência Bancária"
-                      style={styles.radioButton}
-                    />
-                    <RadioButton
-                      value="bb"
-                      label="Boleto"
-                      style={styles.radioButton}
-                    />
-                  </RadioButtonGroup>
-                  {renderStepActions(1)}
-              </StepContent>
-            </Step>
-            <Step>
-              <StepLabel>Dados do comprador</StepLabel>
-              <StepContent>
-                <Card
-                  expiry={props.cc_date}
-                  number={props.cc_number}
-                  cvc={props.cc_cvc}
-                  name={props.cc_name}
-                  focused={props.cc_focus}/>
-                    <TextField
-                      style={sty.input}
-                      name="name"
-                      hintText="Nome"
-                      floatingLabelText="Nome"
-                      type="text"
-                      onFocus={handleCCFocus}
-                      onChange={handleCCName}
-                      value={props.cc_name}
-                    />
-                    <TextField
-                      style={sty.input}
-                      name="number"
-                      hintText="Número do cartão"
-                      floatingLabelText="Número"
-                      type="text"
-                      onFocus={handleCCFocus}
-                      onChange={handleCCNumber}
-                      value={props.cc_number}
-                    />
-                    <TextField
-                      style={sty.input}
-                      name="expiry"
-                      hintText="Data de expiração"
-                      floatingLabelText="Data"
-                      type="text"
-                      onFocus={handleCCFocus}
-                      onChange={handleCCDate}
-                      value={props.cc_date}
-                    />
-                    <TextField
-                      style={sty.input}
-                      name="cvc"
-                      hintText="Código de segurança"
-                      floatingLabelText="Código"
-                      type="text"
-                      onFocus={handleCCFocus}
-                      onChange={handleCCcvc}
-                      value={props.cc_cvc}
-                    />
                 {renderStepActions(2)}
               </StepContent>
             </Step>

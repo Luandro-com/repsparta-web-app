@@ -48,7 +48,7 @@ function mapDispatchToProps(dispatch) {
     fetchProducts: () => dispatch(fetchProducts()),
     fetchDescription: () => dispatch(fetchDescription()),
     fetchFooter: () => dispatch(fetchFooter()),
-    postOrder: (info) => dispatch(postOrder(info)),
+    postOrder: (userInfo, cart) => dispatch(postOrder(userInfo, cart)),
     dispatch,
   };
 }

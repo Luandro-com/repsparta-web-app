@@ -19,12 +19,16 @@ class Shop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cc_focus: 'name',
-      cc_number: '',
-      cc_cvc: '',
-      cc_name: '',
-      cc_date: '',
-      payment: 'cc',
+      first_name: '',
+      last_name: '',
+      email: '',
+      phone: '',
+      number: '',
+      cpf: '',
+      cep: '',
+      state: 'MG',
+      city: 'Viçosa',
+      street: '',
       total: 0,
       open: false,
       finished: false,
@@ -81,44 +85,6 @@ class Shop extends React.Component {
   }
 
   handleClick = () => {
-    const data = {
-      order: {
-       payment_details: {
-         method_id: 'bacs',
-         method_title: 'Direct Bank Transfer',
-         paid: true
-       },
-       billing_address: {
-         first_name: 'John',
-         last_name: 'Doe',
-         address_1: '969 Market',
-         address_2: '',
-         city: 'San Francisco',
-         state: 'CA',
-         postcode: '94103',
-         country: 'US',
-         email: 'john.doe@example.com',
-         phone: '(555) 555-5555'
-       },
-       line_items: [
-         {
-           product_id: 14,
-           quantity: 2,
-           variations: {
-             república: 'Sparta'
-           }
-         },
-         {
-           product_id: 8,
-           quantity: 1,
-           variations: {
-             república: 'Sparta'
-           }
-         }
-       ]
-     }
-    }
-    // postOrder(data);
    this.setState({open: true});
   }
 
@@ -141,29 +107,93 @@ class Shop extends React.Component {
     }
   };
 
-  handleCCFocus = (e) => {
+  /**
+   * Form controllers
+   */
+  handleSubmit = () => {
+    const { total, first_name, last_name, email, phone, number, cpf, cep, street } = this.state;
+    let cart = [];
+    const { products, postOrder } = this.props;
+    products.map((item, key) => {
+      const { id, title, price, } = item;
+      if(this.state[`counter${id}`]) {
+        cart.push({
+          name: title,
+          price,
+          product_id: id,
+          quantity: this.state[`counter${id}`],
+          meta: [{
+            key: "republica",
+            label: "República",
+            value: this.state[`selected${id}`]
+          }]
+        })
+      }
+    });
+
+    console.log(cart);
+    postOrder({
+        total,
+        first_name,
+        last_name,
+        email,
+        phone,
+        number,
+        cpf,
+        cep,
+        street
+      }, cart);
+
+  }
+
+  handleCep = (e) => {
     this.setState({
-      cc_focus: e.target.name
+      cep: e.target.value
     })
   }
-  handleCCName = (e) => {
+  handleFirstName = (e) => {
     this.setState({
-      cc_name: e.target.value
+      first_name: e.target.value
     })
   }
-  handleCCNumber = (e) => {
+  handleLastName = (e) => {
     this.setState({
-      cc_number: e.target.value
+      last_name: e.target.value
     })
   }
-  handleCCcvc = (e) => {
+  handleEmail = (e) => {
+    function checkemail(){
+      var str=e.target.value
+      var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+      if (filter.test(str))
+        return true
+      else {
+        return false
+      }
+    }
+
     this.setState({
-      cc_cvc: e.target.value
+      email: e.target.value
     })
   }
-  handleCCDate = (e) => {
+  handlePhone = (e) => {
     this.setState({
-      cc_date: e.target.value
+      phone: e.target.value
+    })
+  }
+  handleNumber = (e) => {
+    this.setState({
+      number: e.target.value
+    })
+  }
+  handleCpf = (e) => {
+    this.setState({
+      cpf: e.target.value
+    })
+  }
+  handleStreet = (e) => {
+    this.setState({
+      street: e.target.value
     })
   }
 
@@ -204,17 +234,20 @@ class Shop extends React.Component {
         </div>
         <CheckoutDialog
           props={this.state}
-          postOrder={postOrder}
           products={products}
           style={{width: '100%'}}
           close={this.handleClose}
           handleNext={this.handleNext}
           handlePrev={this.handlePrev}
-          handleCCName={this.handleCCName}
-          handleCCNumber={this.handleCCNumber}
-          handleCCcvc={this.handleCCcvc}
-          handleCCDate={this.handleCCDate}
-          handleCCFocus={this.handleCCFocus}/>
+          handleSubmit={this.handleSubmit}
+          handleCep={this.handleCep}
+          handleCpf={this.handleCpf}
+          handleFirstName={this.handleFirstName}
+          handleLastName={this.handleLastName}
+          handlePhone={this.handlePhone}
+          handleNumber={this.handleNumber}
+          handleEmail={this.handleEmail}
+          handleStreet={this.handleStreet}/>
       </div>
     );
   }

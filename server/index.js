@@ -1,15 +1,18 @@
 /* eslint consistent-return:0 */
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const logger = require('./logger');
 const ngrok = require('ngrok');
 const WooCommerceAPI = require('woocommerce-api');
-
 const frontend = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
+const configAdminUrl = process.env.ADMINURL || require('../config').adminUrl;
 const configUrl = process.env.URL || require('../config').url;
 const configConsumerKey = process.env.CONSUMERKEY || require('../config').consumerKey;
 const configConsumerSecret = process.env.CONSUMERSECRET || require('../config').consumerSecret;
@@ -18,11 +21,24 @@ const configConsumerSecret = process.env.CONSUMERSECRET || require('../config').
 // app.use('/api', myApi);
 
 const WooCommerce = new WooCommerceAPI({
-  url: configUrl,
+  url: configAdminUrl,
   consumerKey: configConsumerKey,
   consumerSecret: configConsumerSecret,
 });
-
+app.get('/api/latest', (req, res) => {
+  WooCommerce.get('orders/61', (err, wooRes) => {
+    console.log(wooRes);
+    console.log('===================================');
+    res.send(JSON.parse(wooRes.body));
+  })
+})
+app.get('/api/latests', (req, res) => {
+  WooCommerce.get('orders', (err, wooRes) => {
+    console.log(wooRes);
+    console.log('===================================');
+    res.send(JSON.parse(wooRes.body));
+  })
+})
 /**
  * Products API
  */
@@ -39,11 +55,28 @@ app.get('/api/products', (req, res) => {
 /**
  * Orders API
  */
-app.get('/api/order', (req, res) => {
-  WooCommerce.post('orders', data, (err, data, res) => {
-   console.log(res);
-  });
+app.post('/api/order', (req, res) => {
+  const data = req.body;
+  WooCommerce.post('orders', data, (error, data, wooRes) => {
+    console.log(JSON.parse(wooRes));
+    console.log('--------------------------------------------------------');
+    const formatedWoo = JSON.parse(wooRes);
+    if(formatedWoo.order) {
+      res.send({
+        ok: true,
+        order_number: formatedWoo.order.order_number,
+        order_key: formatedWoo.order.order_key
+      })
+    } else {
+      res.send({
+        ok: false
+      })
+    }
+
+   });
 })
+
+
 // Initialize frontend middleware that will serve your JS app
 const webpackConfig = isDev
   ? require('../internals/webpack/webpack.dev.babel')
