@@ -59,12 +59,25 @@
   background: #000;
   border: 1px solid #000;
 }
+.button {
+  margin: 5% 0 10%;
+}
 .addItem {
   margin: 10% 0 30%;
 }
 @media (min-width: 720px) {
+  .total {
+    margin: 5% 0 3%;
+  }
+  .value {
+    font-size: 2em;
+    margin: 3% 0;
+  }
+  .addItem {
+    margin: 10% 0 30%;
+  }
   .divider {
-    top: -18px;
+    top: -26px;
   }
 }
 

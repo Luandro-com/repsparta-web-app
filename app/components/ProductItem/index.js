@@ -16,7 +16,7 @@ const sty = {
   select: {
     background: '#fff',
     width: '75%',
-    '@media (min-width: 720px)': {
+    '@media (min-width: 768px)': {
         width: '50%',
         padding: '31px 15px',
         borderRadius: 35,
@@ -73,7 +73,7 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
           type === 'simple' &&
           <div className={ styles.simple_container }>
             <div className={ styles.simple_product }>
-              {stock_quantity} restantes
+              {stock_quantity} <span className={ styles.restantes}>restantes</span>
             </div>
           </div>
         }

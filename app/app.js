@@ -72,8 +72,9 @@ const rootRoute = {
 
 ReactDOM.render(
   <Provider store={store}>
-    <StyleRoot>
       <MuiThemeProvider muiTheme={muiTheme}>
+      <StyleRoot>
+
         <Router
           history={history}
           routes={rootRoute}
@@ -97,8 +98,8 @@ ReactDOM.render(
             )
           }
         />
+        </StyleRoot>
       </MuiThemeProvider>
-    </StyleRoot>
   </Provider>,
   document.getElementById('app')
 );
