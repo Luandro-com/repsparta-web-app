@@ -24,15 +24,22 @@ require('react-credit-card/source/card-types.css')
 import styles from './styles.css';
 
 const sty={
+  inputMin: {
+    width: '30%',
+    margin: '0 1%'
+  },
   input: {
     width: '45%',
     margin: '0 2%'
-  }
+  },
+  errorStyle: {
+   color: '#EC1D24'
+ },
 }
 
 function CheckoutDialog({
     close, handlePrev, handleNext, handleSubmit,
-    handleCep, handleCpf, handleFirstName, handleLastName, handlePhone, handleNumber, handleEmail, handleStreet,
+    handleCep, handleCpf, handleFirstName, handleLastName, handlePhone, handleNumber, handleEmail, handleStreet, handleNeighborhood,
     products, props
   }) {
   const {
@@ -94,31 +101,40 @@ function CheckoutDialog({
         <div style={{margin: 'auto'}}>
           <Stepper activeStep={props.stepIndex} orientation="vertical">
             <Step>
-              <StepLabel>Confirme lista de compras</StepLabel>
+              <StepLabel>Dados do comprador</StepLabel>
               <StepContent>
                 <TextField
-                  style={ sty.input }
+                  style={ sty.inputMin }
                   hintText="José"
                   floatingLabelText="Primeiro nome"
                   type="text"
                   onChange={handleFirstName}
+                  onBlur={handleFirstName}
+                  errorText={props.first_name_error ? 'Este campo é obrigatório' : ''}
+                  errorStyle={sty.errorStyle}
                   value={props.first_name}
                 />
                 <TextField
-                  style={ sty.input }
+                  style={ sty.inputMin }
                   hintText="Rodriguez"
                   floatingLabelText="Sobrenome"
                   type="text"
                   onChange={handleLastName}
                   value={props.last_name}
+                  onBlur={handleLastName}
+                  errorText={props.last_name_error ? 'Este campo é obrigatório' : ''}
+                  errorStyle={sty.errorStyle}
                 />
                 <TextField
-                  style={ sty.input }
+                  style={ sty.inputMin }
                   hintText="jose_rod@repsparta.com"
                   floatingLabelText="E-mail"
-                  type="text"
+                  type="email"
                   onChange={handleEmail}
                   value={props.email}
+                  onBlur={handleEmail}
+                  errorText={props.email_error ? 'Digite um email válido' : ''}
+                  errorStyle={sty.errorStyle}
                 />
                 <TextField
                   style={ sty.input }
@@ -127,13 +143,27 @@ function CheckoutDialog({
                   type="text"
                   onChange={handleCpf}
                   value={props.cpf}
+                  onBlur={handleCpf}
+                  errorText={props.cpf_error ? 'Digite um CPF válido' : ''}
+                  errorStyle={sty.errorStyle}
+                />
+                <TextField
+                  style={ sty.input }
+                  hintText="(31) 99787-2928"
+                  floatingLabelText="Telefone"
+                  type="tel"
+                  onChange={handlePhone}
+                  value={props.phone}
+                  onBlur={handlePhone}
+                  errorText={props.phone_error ? 'Digite um telefone válido' : ''}
+                  errorStyle={sty.errorStyle}
                 />
 
                 {renderStepActions(0)}
               </StepContent>
             </Step>
             <Step>
-              <StepLabel>Dados para contato</StepLabel>
+              <StepLabel>Endereço</StepLabel>
               <StepContent>
                   <TextField
                     style={ sty.input }
@@ -142,15 +172,19 @@ function CheckoutDialog({
                     type="text"
                     onChange={handleCep}
                     value={props.cep}
+                    onBlur={handleCep}
+                    errorText={props.cep_error ? 'Digite um CEP válido' : ''}
+                    errorStyle={sty.errorStyle}
                   />
                   <TextField
                     style={ sty.input }
-                    hintText="(31) 99787-2928"
-                    floatingLabelText="Telefone"
+                    hintText="Bairro das Araras"
+                    floatingLabelText="Bairro"
                     type="text"
-                    onChange={handlePhone}
-                    value={props.phone}
+                    onChange={handleNeighborhood}
+                    value={props.neighborhood}
                   />
+
                   <TextField
                     style={ sty.input }
                     hintText="Rua dos Eucaliptos"
@@ -162,7 +196,7 @@ function CheckoutDialog({
                   <TextField
                     style={ sty.input }
                     hintText="13"
-                    floatingLabelText="number"
+                    floatingLabelText="Número"
                     type="text"
                     onChange={handleNumber}
                     value={props.number}
@@ -171,7 +205,7 @@ function CheckoutDialog({
               </StepContent>
             </Step>
             <Step>
-              <StepLabel>Dados do comprador</StepLabel>
+              <StepLabel>Finalizar</StepLabel>
               <StepContent>
                 <Table selectable={false}>
                   <TableBody displayRowCheckbox={false}>

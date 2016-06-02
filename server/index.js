@@ -26,7 +26,7 @@ const WooCommerce = new WooCommerceAPI({
   consumerSecret: configConsumerSecret,
 });
 app.get('/api/latest', (req, res) => {
-  WooCommerce.get('orders/61', (err, wooRes) => {
+  WooCommerce.get('orders/'+req.param, (err, wooRes) => {
     console.log(wooRes);
     console.log('===================================');
     res.send(JSON.parse(wooRes.body));

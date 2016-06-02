@@ -5,8 +5,10 @@
 */
 
 import React from 'react';
-import Loader from 'halogen/PulseLoader';
+import 'whatwg-fetch';
+import CPF from 'gerador-validador-cpf';
 
+import Loader from 'halogen/PulseLoader';
 import ProductItem from 'components/ProductItem';
 import CheckoutDialog from 'components/CheckoutDialog';
 
@@ -26,13 +28,20 @@ class Shop extends React.Component {
       number: '',
       cpf: '',
       cep: '',
-      state: 'MG',
-      city: 'Viçosa',
+      state: '',
+      city: '',
       street: '',
+      neighborhood: '',
       total: 0,
       open: false,
       finished: false,
       stepIndex: 0,
+      first_name_error: false,
+      last_name_error: false,
+      email_error: false,
+      cpf_error: false,
+      cep_error: false,
+      phone_error: false,
     }
   }
 
@@ -85,7 +94,7 @@ class Shop extends React.Component {
   }
 
   handleClick = () => {
-   this.setState({open: true});
+    this.setState({open: true});
   }
 
   handleClose = () => {
@@ -111,7 +120,10 @@ class Shop extends React.Component {
    * Form controllers
    */
   handleSubmit = () => {
-    const { total, first_name, last_name, email, phone, number, cpf, cep, street } = this.state;
+    const {
+      total, first_name, last_name, email, phone, number, cpf, cep, street, neighborhood, city, state,
+      first_name_error, last_name_error, email_error, cpf_error, cep_error, phone_error
+    } = this.state;
     let cart = [];
     const { products, postOrder } = this.props;
     products.map((item, key) => {
@@ -130,56 +142,127 @@ class Shop extends React.Component {
         })
       }
     });
-
-    console.log(cart);
-    postOrder({
-        total,
-        first_name,
-        last_name,
-        email,
-        phone,
-        number,
-        cpf,
-        cep,
-        street
-      }, cart);
-
+    const cleanCpf = cpf.replace(/\D/g, '');
+    function checkErrors() {
+      if(!first_name_error && !last_name_error && !email_error && !cpf_error && !cep_error && !phone_error) {
+        return false
+      } else {
+        return true
+      }
+    }
+    if(!checkErrors()) {
+      postOrder({
+          total,
+          first_name,
+          last_name,
+          email,
+          phone,
+          number,
+          cpf: cleanCpf,
+          cep,
+          street,
+          state,
+          city,
+          neighborhood
+        }, cart);
+    }
   }
 
   handleCep = (e) => {
-    this.setState({
-      cep: e.target.value
-    })
+    const text = e.target.value;
+    const cleaned = text.replace(/[^a-zA-Z0-9 ]/g, "");
+    if(cleaned.length < 8) {
+      this.setState({
+        cep_error: true,
+        cep: text
+      })
+    } else {
+      this.setState({
+        cep: text
+      })
+      fetch(`https://viacep.com.br/ws/${cleaned}/json/`)
+      .then((res) => res.json())
+      .then((json) => {
+        this.setState({
+          cep_error: false,
+          cep: json.cep,
+          city: json.localidade,
+          state: json.uf,
+          neighborhood: json.bairro,
+          number: json.complemento
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
   }
   handleFirstName = (e) => {
-    this.setState({
-      first_name: e.target.value
-    })
+    const text = e.target.value
+    if(text.length < 2) {
+      this.setState({
+        first_name_error: true,
+        first_name: text
+      })
+    } else {
+      this.setState({
+        first_name_error: false,
+        first_name: text
+      })
+    }
   }
   handleLastName = (e) => {
-    this.setState({
-      last_name: e.target.value
-    })
+    const text = e.target.value
+    if(text.length < 2) {
+      this.setState({
+        last_name_error: true,
+        last_name: text
+      })
+    } else {
+      this.setState({
+        last_name_error: false,
+        last_name: text
+      })
+    }
   }
   handleEmail = (e) => {
-    function checkemail(){
-      var str=e.target.value
+    const text = e.target.value
+
+    function checkemail(input){
       var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
-      if (filter.test(str))
+      if (filter.test(input))
         return true
       else {
         return false
       }
     }
-
-    this.setState({
-      email: e.target.value
-    })
+    const checked = checkemail(text);
+    if(text.length < 2 || !checked) {
+      this.setState({
+        email_error: true,
+        email: text
+      })
+    } else {
+      this.setState({
+        email_error: false,
+        email: text
+      })
+    }
   }
   handlePhone = (e) => {
-    this.setState({
-      phone: e.target.value
-    })
+    const text = e.target.value;
+    const cleaned = text.replace(/\D/g, '');
+    if(cleaned.length < 10) {
+      this.setState({
+        phone_error: true,
+        phone: text
+      })
+    } else {
+      this.setState({
+        phone_error: false,
+        phone: text
+      })
+    }
   }
   handleNumber = (e) => {
     this.setState({
@@ -187,8 +270,25 @@ class Shop extends React.Component {
     })
   }
   handleCpf = (e) => {
+    const text = e.target.value
+    const checked = CPF.validate(text);
+    const formated = CPF.format(text);
+    if(text.length < 11 || !checked) {
+      this.setState({
+        cpf_error: true,
+        cpf: text
+      })
+    } else {
+      this.setState({
+        cpf_error: false,
+        cpf: formated
+      })
+    }
+  }
+
+  handleNeighborhood = (e) => {
     this.setState({
-      cpf: e.target.value
+      neighborhood: e.target.value
     })
   }
   handleStreet = (e) => {
@@ -198,8 +298,9 @@ class Shop extends React.Component {
   }
 
   render() {
+    const { total } = this.state;
     const { products, postOrder, eventImg } = this.props;
-    let ProductList, eventImgHolder;
+    let ProductList, eventImgHolder, finish;
     eventImg
       ? eventImgHolder = <img className={ styles.event } src={eventImg} />
       : eventImgHolder = <Loader />
@@ -220,6 +321,9 @@ class Shop extends React.Component {
         </div>
       )
       : ProductList = <Loader />
+    total > 0
+      ? finish = <button className={ styles.button } onClick={this.handleClick}>Finalizar Compra</button>
+      : finish = <h1>Adicione um produto no carrinho para começar</h1>
     return (
       <div className={ styles.wrapper }>
         <img className={ styles.divider } src={Divider} />
@@ -230,7 +334,7 @@ class Shop extends React.Component {
           <hr className={ styles.line } />
           <img className={ styles.total } src={Total} />
           <h2 className={ styles.value }>R${this.state.total},00</h2>
-          <button className={ styles.button } onClick={this.handleClick}>Finalizar Compra</button>
+          { finish }
         </div>
         <CheckoutDialog
           props={this.state}
@@ -247,6 +351,7 @@ class Shop extends React.Component {
           handlePhone={this.handlePhone}
           handleNumber={this.handleNumber}
           handleEmail={this.handleEmail}
+          handleNeighborhood={this.handleNeighborhood}
           handleStreet={this.handleStreet}/>
       </div>
     );

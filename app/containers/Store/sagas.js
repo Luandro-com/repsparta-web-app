@@ -60,7 +60,7 @@ function productsApi() {
 }
 
 function ordersApi(data) {
-  const { first_name, last_name, email, phone, street, city, state, cep, cpf, number} = data.userInfo;
+  const { first_name, last_name, email, phone, street, city, state, cep, cpf, number, neighborhood} = data.userInfo;
   console.log(data.userInfo);
   let cart = [];
   data.cart.map((item) => {
@@ -98,10 +98,31 @@ function ordersApi(data) {
        sex: false,
        number,
       },
-     line_items: cart
+     line_items: cart,
+     customer: {
+      email,
+      first_name,
+      last_name,
+      billing_address: {
+        first_name,
+        last_name,
+        address_1: street,
+        city,
+        state,
+        postcode: cep,
+        country: "BR",
+        email,
+        phone,
+        persontype: "F",
+        cpf,
+        sex: false,
+        number,
+        neighborhood
+      }
+    }
    }
   }
-  console.log('BODY', JSON.stringify(formatedData));
+  console.log('BODY', formatedData);
   return fetch(`${apiUrl}/order`, {
     method: 'POST',
     headers: {
@@ -125,6 +146,7 @@ function ordersApi(data) {
  export function* createOrder() {
    while(true) {
      const action = yield take(CREATE_ORDER);
+     console.log(action.payload);
      const order = yield call(ordersApi, action.payload);
      if(order.ok) {
       // window.location = `${adminUrl}/checkout/order-pay/${order.order_number}/?pay_for_order=true&key=${order.order_key}`;
