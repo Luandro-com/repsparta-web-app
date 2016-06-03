@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const logger = require('./logger');
 const ngrok = require('ngrok');
 const WooCommerceAPI = require('woocommerce-api');
+const pagseguro = require('pagseguro');
 const frontend = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -19,6 +20,11 @@ const configConsumerSecret = process.env.CONSUMERSECRET || require('../config').
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
 
+const pag = new pagseguro({
+  email : 'luandro@gmail.com',
+  token: '341CF7978F82449B9672F66A28A73E43',
+  mode : 'sandbox'
+});
 const WooCommerce = new WooCommerceAPI({
   url: configAdminUrl,
   consumerKey: configConsumerKey,

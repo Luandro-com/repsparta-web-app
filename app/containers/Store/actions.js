@@ -51,5 +51,5 @@ export const fetchProducts = () => ({
 
 export const saveProducts = (products) => ({
   type: SAVE_PRODUCTS,
-  payload: product
+  payload: products
 });

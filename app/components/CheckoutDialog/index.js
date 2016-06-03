@@ -17,10 +17,6 @@ import {
   StepContent,
 } from 'material-ui/Stepper';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-
-import Card from 'react-credit-card';
-require('react-credit-card/source/card.css');
-require('react-credit-card/source/card-types.css')
 import styles from './styles.css';
 
 const sty={
