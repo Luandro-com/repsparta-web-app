@@ -8,8 +8,8 @@ import React from 'react';
 import Loader from 'halogen/PulseLoader';
 
 import styles from './styles.css';
-import Divider from './divider2.png';
-import BotDivider from './footer.png';
+import Divider from './divider2.svg';
+import BotDivider from './footer.svg';
 import Facebook from './facebook.png';
 
 function Footer({footer}) {

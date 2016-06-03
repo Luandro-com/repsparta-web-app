@@ -13,7 +13,7 @@ import ProductItem from 'components/ProductItem';
 import CheckoutDialog from 'components/CheckoutDialog';
 
 import styles from './styles.css';
-import Divider from './divider1.png';
+import Divider from './divider1.svg';
 import Action from './garanta-ja.png';
 import Total from './total.png';
 
