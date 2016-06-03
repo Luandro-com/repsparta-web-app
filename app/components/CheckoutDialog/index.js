@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import Radium from 'radium';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -16,17 +17,24 @@ import {
   StepLabel,
   StepContent,
 } from 'material-ui/Stepper';
+import Loader from 'halogen/GridLoader';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import styles from './styles.css';
 
 const sty={
   inputMin: {
-    width: '30%',
-    margin: '0 1%'
+    width: '100%',
+    '@media (min-width: 768px)': {
+      width: '30%',
+      margin: '0 1%',
+    },
   },
   input: {
-    width: '45%',
-    margin: '0 2%'
+    width: '100%',
+    '@media (min-width: 768px)': {
+      width: '45%',
+      margin: '0 2%',
+    },
   },
   errorStyle: {
    color: '#EC1D24'
@@ -36,7 +44,7 @@ const sty={
 function CheckoutDialog({
     close, handlePrev, handleNext, handleSubmit,
     handleCep, handleCpf, handleFirstName, handleLastName, handlePhone, handleNumber, handleEmail, handleStreet, handleNeighborhood,
-    products, props
+    products, order, props
   }) {
   const {
     open, finished, stepIndex,
@@ -84,6 +92,10 @@ function CheckoutDialog({
       )
     }
   });
+  let finishButton;
+  order.loading
+    ? finishButton = <div style={{paddingTop: 15}}><Loader color={'#EC1D24'} /></div>
+    : finishButton = renderStepActions(2)
   return (
     <div className={ styles.wrapper }>
       <Dialog
@@ -215,7 +227,7 @@ function CheckoutDialog({
                     }
                   </TableBody>
                 </Table>
-                {renderStepActions(2)}
+                { finishButton }
               </StepContent>
             </Step>
           </Stepper>
@@ -228,5 +240,5 @@ function CheckoutDialog({
     </div>
   );
 }
-
+CheckoutDialog = Radium(CheckoutDialog);
 export default CheckoutDialog;

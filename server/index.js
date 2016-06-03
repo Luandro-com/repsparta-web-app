@@ -25,11 +25,38 @@ const pag = new pagseguro({
   token: '341CF7978F82449B9672F66A28A73E43',
   mode : 'sandbox'
 });
+pag.currency('BRL');
+pag.reference('12345');
+pag.addItem({
+    id: 1,
+    description: 'Descrição do primeiro produto',
+    amount: "4230.00",
+    quantity: 3,
+    weight: 2342
+});
+pag.buyer({
+    name: 'José Comprador',
+    email: 'comprador@uol.com.br',
+    phoneAreaCode: '51',
+    phoneNumber: '12345678'
+});
+pag.setRedirectURL("http://loja.repsparta.com");
+pag.setNotificationURL("http://loja.repsparta.com/shop");
+
 const WooCommerce = new WooCommerceAPI({
   url: configAdminUrl,
   consumerKey: configConsumerKey,
   consumerSecret: configConsumerSecret,
 });
+
+app.get('/api/payment', (req, res) => {
+  pag.send((err, res) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log(res);
+    });
+})
 app.get('/api/latest', (req, res) => {
   WooCommerce.get('orders/'+req.param, (err, wooRes) => {
     console.log(wooRes);

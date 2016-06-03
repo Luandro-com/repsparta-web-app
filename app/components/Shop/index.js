@@ -299,7 +299,7 @@ class Shop extends React.Component {
 
   render() {
     const { total } = this.state;
-    const { products, postOrder, eventImg } = this.props;
+    const { products, order, postOrder, eventImg } = this.props;
     let ProductList, eventImgHolder, finish;
     eventImg
       ? eventImgHolder = <img className={ styles.event } src={eventImg} />
@@ -339,6 +339,7 @@ class Shop extends React.Component {
         <CheckoutDialog
           props={this.state}
           products={products}
+          order={order}
           style={{width: '100%'}}
           close={this.handleClose}
           handleNext={this.handleNext}

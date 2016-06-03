@@ -149,7 +149,8 @@ function ordersApi(data) {
      console.log(action.payload);
      const order = yield call(ordersApi, action.payload);
      if(order.ok) {
-      window.location = `${adminUrl}/checkout/order-pay/${order.order_number}/?pay_for_order=true&key=${order.order_key}`;
+      //  PagSeguroLightbox('');
+      // window.location = `${adminUrl}/checkout/order-pay/${order.order_number}/?pay_for_order=true&key=${order.order_key}`;
      }
    }
  }

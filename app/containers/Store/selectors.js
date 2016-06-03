@@ -23,6 +23,10 @@ const selectProducts = () => createSelector(
   selectStoreDomain(),
   (globalState) => globalState.get('products')
 );
+const selectOrder = () => createSelector(
+  selectStoreDomain(),
+  (globalState) => globalState.get('order').toJS()
+);
 
 const selectDescription = () => createSelector(
   selectStoreDomain(),
@@ -43,6 +47,7 @@ export default selectStore;
 export {
   selectStoreDomain,
   selectProducts,
+  selectOrder,
   selectDescription,
   selectEventImg,
   selectFooter

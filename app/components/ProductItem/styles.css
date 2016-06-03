@@ -20,10 +20,11 @@
 }
 .stock {
   background: #0D1332;
-  padding: 14px 15px;
+  /*padding: 14px 15px;*/
   width: 50px;
   margin-right: -50px;
   position: relative;
+  top: -5px;
   left: -100px;
   color: #fff;
   display: flex;
@@ -66,11 +67,11 @@
   padding-left: 5px;
   display: flex;
   flex-flow: column;
-
+  margin-top: -15px;
 }
 .plus, .minus {
-  padding: 1px 8px;
-  margin: 0.5px 0;
+  padding: 4px 12px;
+  margin: 2px 0;
 }
 .plus {
   background-color: #EC1D24;
@@ -122,15 +123,23 @@
   .restantes {
     display: none;
   }
+  .stock {
+    left: -80px;
+  }
 
 }
 @media (min-width: 1024px) {
+  .plus, .minus {
+    padding: 1px 8px;
+    margin: 0.5px 0;
+  }
   .info {
     width: 40%;
   }
   .stock {
-    left: -160px;
+    left: -120px;
     width: 80px;
     margin-right: -80px;
+    top: 0;
   }
 }
