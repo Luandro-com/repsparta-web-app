@@ -44,6 +44,9 @@ const muiTheme = getMuiTheme({
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
+import ga from 'react-ga';
+ga.initialize('UA-78747741-1');
+
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/lib/sanitize.css';
 
