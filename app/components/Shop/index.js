@@ -11,11 +11,24 @@ import CPF from 'gerador-validador-cpf';
 import Loader from 'halogen/SquareLoader';
 import ProductItem from 'components/ProductItem';
 import CheckoutDialog from 'components/CheckoutDialog';
+import FlatButton from 'material-ui/FlatButton';
 
 import styles from './styles.css';
 import Divider from './divider1.svg';
 import Action from './garanta-ja.png';
 import Total from './total.png';
+
+const sty = {
+  finalize: {
+    margin: '5% 0 10%',
+    border: '1px solid #fff',
+    padding: '20px 40px',
+    height: 'auto',
+    lineHeight: 'auto',
+    color: '#fff'
+
+  }
+}
 
 class Shop extends React.Component {
   constructor(props) {
@@ -322,7 +335,7 @@ class Shop extends React.Component {
       )
       : ProductList = <Loader />
     total > 0
-      ? finish = <button className={ styles.button } onClick={this.handleClick}>Finalizar Compra</button>
+      ? finish = <FlatButton label='Finalizar compra' style={ sty.finalize } onTouchTap={this.handleClick} />
       : finish = <h1 className={ styles.addItem }>Adicione um produto no carrinho para começar</h1>
     return (
       <div className={ styles.wrapper }>

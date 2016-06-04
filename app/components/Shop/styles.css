@@ -60,19 +60,6 @@
   font-size: 2em;
   margin: 10% 0;
 }
-.button {
-  border: 1px solid #fff;
-  padding: 20px 40px;
-  margin: 10% 0 30%;
-  cursor: pointer;
-}
-.button:hover {
-  background: #000;
-  border: 1px solid #000;
-}
-.button {
-  margin: 5% 0 10%;
-}
 .addItem {
   margin: 10% 0 30%;
 }

@@ -96,8 +96,8 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
         <div className={ styles.counter }>
           <span className={ styles.num }>{ counter }</span>
           <div className={ styles.buttons }>
-            <FlatButton backgroundColor="#EC1D24" label='+' hoverColor="#fff" style={ sty.counter } onClick={inc} />
-            <FlatButton backgroundColor="#FFCA05" label='-' hoverColor="#fff" style={ sty.counter } onClick={dec} />
+            <FlatButton backgroundColor="#EC1D24" label='+' hoverColor="#fff" style={ sty.counter } onTouchTap={inc} />
+            <FlatButton backgroundColor="#FFCA05" label='-' hoverColor="#fff" style={ sty.counter } onTouchTap={dec} />
           </div>
         </div>
       </div>
