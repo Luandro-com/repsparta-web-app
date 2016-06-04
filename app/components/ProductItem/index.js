@@ -17,30 +17,34 @@ const sty = {
   select: {
     background: '#fff',
     width: '75%',
-    // '@media (min-width: 768px)': {
-    //     width: '50%',
-    //     padding: '31px 15px',
-    //     borderRadius: 35,
-    //     textAlign: 'center',
-    //   }
+    paddingLeft: 15,
   },
   underline: {
     display: 'none'
   },
   label: {
     color: '#0D1332',
-    // '@media (min-width: 720px)': {
-    //   top: -24,
-    //   paddingRight: 88,
-    // }
   },
   icon: {
     fill: '#0D1332',
-    // '@media (min-width: 720px)': {
-    //   top: -18,
-    //   width: 40,
-    //   height: 40,
-    // }
+  },
+  selectFull: {
+    background: '#fff',
+    width: '80%',
+    padding: '31px 15px',
+    borderRadius: 35,
+    textAlign: 'center',
+  },
+  labelFull: {
+    top: -24,
+    paddingRight: 88,
+    color: '#0D1332',
+  },
+  iconFull: {
+    fill: '#0D1332',
+    top: -18,
+    width: 40,
+    height: 40,
   },
   counter: {
     borderRadius: 0,
@@ -48,6 +52,7 @@ const sty = {
   }
 }
 
+const fullWidth = window.innerWidth	> 1023;
 function ProductItem({description, featured_src, id, type, stock_quantity, price_html, short_description, title, variations, inc, dec, change, selected, counter}) {
   function createMarkup() { return {__html: price_html}; };
   return (
@@ -62,10 +67,10 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
             <SelectField
               value={ selected }
               onChange={ change }
-              iconStyle={ sty.icon }
-              labelStyle={ sty.label }
+              iconStyle={ fullWidth ? sty.iconFull : sty.icon }
+              labelStyle={ fullWidth ? sty.labelFull : sty.label }
               underlineStyle={ sty.underline }
-              style={ sty.select }>
+              style={ fullWidth ? sty.selectFull : sty.select }>
               <MenuItem value={1} primaryText='República...' />
               {variations.map((item, key) => <MenuItem
                 value={item.attributes[0].option}

@@ -21,15 +21,16 @@
 .stock {
   background: #0D1332;
   /*padding: 14px 15px;*/
-  width: 50px;
-  margin-right: -50px;
+  width: 42px;
+  margin-right: -42px;
   position: relative;
   top: -5px;
-  left: -100px;
+  left: -84px;
   color: #fff;
   display: flex;
   flex-flow: column;
   align-items: center;
+  justify-content: center;
 }
 .stock_num {
 
@@ -94,7 +95,7 @@
     border: none;
   }
   .title {
-    width: 65%;
+    width: 55%;
   }
   .img {
     width: 20%;
@@ -123,9 +124,9 @@
     width: 40%;
   }
   .stock {
-    left: -120px;
+    top: 0;
+    left: -140px;
     width: 80px;
     margin-right: -80px;
-    top: 0;
   }
 }
