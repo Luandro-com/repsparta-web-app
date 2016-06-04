@@ -34,27 +34,12 @@ class Shop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: '',
-      last_name: '',
+      full_name: '',
       email: '',
-      phone: '',
-      number: '',
-      cpf: '',
-      cep: '',
-      state: '',
-      city: '',
-      street: '',
-      neighborhood: '',
       total: 0,
       open: false,
-      finished: false,
-      stepIndex: 0,
-      first_name_error: false,
-      last_name_error: false,
+      full_name_error: false,
       email_error: false,
-      cpf_error: false,
-      cep_error: false,
-      phone_error: false,
     }
   }
 
@@ -114,28 +99,13 @@ class Shop extends React.Component {
     this.setState({open: false});
   }
 
-  handleNext = () => {
-    const {stepIndex} = this.state;
-    this.setState({
-      stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2,
-    });
-  };
-
-  handlePrev = () => {
-    const {stepIndex} = this.state;
-    if (stepIndex > 0) {
-      this.setState({stepIndex: stepIndex - 1});
-    }
-  };
-
   /**
    * Form controllers
    */
   handleSubmit = () => {
     const {
-      total, first_name, last_name, email, phone, number, cpf, cep, street, neighborhood, city, state,
-      first_name_error, last_name_error, email_error, cpf_error, cep_error, phone_error
+      total, full_name, email,
+      full_name_error, email_error, cep_error
     } = this.state;
     let cart = [];
     const { products, startPayment } = this.props;
@@ -155,86 +125,32 @@ class Shop extends React.Component {
         })
       }
     });
-    const cleanCpf = cpf.replace(/\D/g, '');
     function checkErrors() {
-      if(!first_name_error && !last_name_error && !email_error && !cpf_error && !cep_error && !phone_error) {
+      if(!full_name_error && !email_error && !(full_name.split(' ').length < 2) && !(email.split('').length < 5)) {
         return false
-      } else {
-        return true
       }
+      return true
     }
     if(!checkErrors()) {
       startPayment({
           total,
-          first_name,
-          last_name,
-          email,
-          phone,
-          number,
-          cpf: cleanCpf,
-          cep,
-          street,
-          state,
-          city,
-          neighborhood
+          full_name,
+          email
         }, cart);
     }
   }
 
-  handleCep = (e) => {
-    const text = e.target.value;
-    const cleaned = text.replace(/[^a-zA-Z0-9 ]/g, "");
-    if(cleaned.length < 8) {
-      this.setState({
-        cep_error: true,
-        cep: text
-      })
-    } else {
-      this.setState({
-        cep: text
-      })
-      fetch(`https://viacep.com.br/ws/${cleaned}/json/`)
-      .then((res) => res.json())
-      .then((json) => {
-        this.setState({
-          cep_error: false,
-          cep: json.cep,
-          city: json.localidade,
-          state: json.uf,
-          neighborhood: json.bairro,
-          number: json.complemento
-        })
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    }
-  }
-  handleFirstName = (e) => {
+  handleName = (e) => {
     const text = e.target.value
     if(text.length < 2) {
       this.setState({
-        first_name_error: true,
-        first_name: text
+        full_name_error: true,
+        full_name: text
       })
     } else {
       this.setState({
-        first_name_error: false,
-        first_name: text
-      })
-    }
-  }
-  handleLastName = (e) => {
-    const text = e.target.value
-    if(text.length < 2) {
-      this.setState({
-        last_name_error: true,
-        last_name: text
-      })
-    } else {
-      this.setState({
-        last_name_error: false,
-        last_name: text
+        full_name_error: false,
+        full_name: text
       })
     }
   }
@@ -262,53 +178,7 @@ class Shop extends React.Component {
       })
     }
   }
-  handlePhone = (e) => {
-    const text = e.target.value;
-    const cleaned = text.replace(/\D/g, '');
-    if(cleaned.length < 10) {
-      this.setState({
-        phone_error: true,
-        phone: text
-      })
-    } else {
-      this.setState({
-        phone_error: false,
-        phone: text
-      })
-    }
-  }
-  handleNumber = (e) => {
-    this.setState({
-      number: e.target.value
-    })
-  }
-  handleCpf = (e) => {
-    const text = e.target.value
-    const checked = CPF.validate(text);
-    const formated = CPF.format(text);
-    if(text.length < 11 || !checked) {
-      this.setState({
-        cpf_error: true,
-        cpf: text
-      })
-    } else {
-      this.setState({
-        cpf_error: false,
-        cpf: formated
-      })
-    }
-  }
 
-  handleNeighborhood = (e) => {
-    this.setState({
-      neighborhood: e.target.value
-    })
-  }
-  handleStreet = (e) => {
-    this.setState({
-      street: e.target.value
-    })
-  }
 
   render() {
     const { total } = this.state;
@@ -357,18 +227,9 @@ class Shop extends React.Component {
           order={order}
           style={{width: '100%'}}
           close={this.handleClose}
-          handleNext={this.handleNext}
-          handlePrev={this.handlePrev}
           handleSubmit={this.handleSubmit}
-          handleCep={this.handleCep}
-          handleCpf={this.handleCpf}
-          handleFirstName={this.handleFirstName}
-          handleLastName={this.handleLastName}
-          handlePhone={this.handlePhone}
-          handleNumber={this.handleNumber}
-          handleEmail={this.handleEmail}
-          handleNeighborhood={this.handleNeighborhood}
-          handleStreet={this.handleStreet}/>
+          handleName={this.handleName}
+          handleEmail={this.handleEmail} />
       </div>
     );
   }

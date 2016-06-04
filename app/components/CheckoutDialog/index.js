@@ -1,6 +1,6 @@
 /**
 *
-* MobileCheckoutDialog
+* CheckoutDialog
 *
 */
 
@@ -36,15 +36,8 @@ const sty={
  }
 }
 
-function MobileCheckoutDialog({
-    close, handleSubmit,
-    handleCep, handleCpf, handleFirstName, handleLastName, handlePhone, handleNumber, handleEmail, handleStreet, handleNeighborhood,
-    products, order, props
-  }) {
-  const {
-    open,
-    first_name, last_name, email, phone, number, cpf, cep, street
-  } = props;
+function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products, order, props }) {
+  const { open, full_name, email } = props;
 
   let actions;
   order.loading
@@ -82,7 +75,6 @@ function MobileCheckoutDialog({
     <div className={ styles.wrapper }>
       <Dialog
         title="Finalizar Compra"
-        // className={ styles.overlay }
         contentStyle={sty.modal}
         autoScrollBodyContent={true}
         actions={actions}
@@ -95,11 +87,11 @@ function MobileCheckoutDialog({
             hintText="José da Silva"
             floatingLabelText="Nome completo"
             type="text"
-            onChange={handleFirstName}
-            onBlur={handleFirstName}
-            errorText={props.first_name_error ? 'Este campo é obrigatório' : ''}
+            onChange={handleName}
+            onBlur={handleName}
+            errorText={props.full_name_error ? 'Este campo é obrigatório' : ''}
             errorStyle={sty.errorStyle}
-            value={props.first_name}
+            value={props.full_name}
           />
           <TextField
             style={ sty.inputMin }
@@ -112,64 +104,6 @@ function MobileCheckoutDialog({
             errorText={props.email_error ? 'Digite um email válido' : ''}
             errorStyle={sty.errorStyle}
           />
-          {/*<TextField
-            style={ sty.input }
-            hintText="123.456.789-10"
-            floatingLabelText="CPF"
-            type="text"
-            onChange={handleCpf}
-            value={props.cpf}
-            onBlur={handleCpf}
-            errorText={props.cpf_error ? 'Digite um CPF válido' : ''}
-            errorStyle={sty.errorStyle}
-          />
-          <TextField
-            style={ sty.input }
-            hintText="(31) 99787-2928"
-            floatingLabelText="Telefone"
-            type="tel"
-            onChange={handlePhone}
-            value={props.phone}
-            onBlur={handlePhone}
-            errorText={props.phone_error ? 'Digite um telefone válido' : ''}
-            errorStyle={sty.errorStyle}
-          />
-          <TextField
-            style={ sty.input }
-            hintText="36570-000"
-            floatingLabelText="CEP"
-            type="text"
-            onChange={handleCep}
-            value={props.cep}
-            onBlur={handleCep}
-            errorText={props.cep_error ? 'Digite um CEP válido' : ''}
-            errorStyle={sty.errorStyle}
-          />
-          <TextField
-            style={ sty.input }
-            hintText="Bairro das Araras"
-            floatingLabelText="Bairro"
-            type="text"
-            onChange={handleNeighborhood}
-            value={props.neighborhood}
-          />
-
-          <TextField
-            style={ sty.input }
-            hintText="Rua dos Eucaliptos"
-            floatingLabelText="Rua"
-            type="text"
-            onChange={handleStreet}
-            value={props.street}
-          />
-          <TextField
-            style={ sty.input }
-            hintText="13"
-            floatingLabelText="Número"
-            type="text"
-            onChange={handleNumber}
-            value={props.number}
-          />*/}
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
               { cart }
@@ -195,5 +129,5 @@ function MobileCheckoutDialog({
     </div>
   );
 }
-MobileCheckoutDialog = Radium(MobileCheckoutDialog);
-export default MobileCheckoutDialog;
+CheckoutDialog = Radium(CheckoutDialog);
+export default CheckoutDialog;

@@ -38,53 +38,25 @@ const WooCommerce = new WooCommerceAPI({
  * Payment API
  */
 app.post('/api/payment', (req, res) => {
-  const data = req.body.order;
-  // data.line_items.map((item) => {
-  //   pag.addItem({
-  //       id: item.id,
-  //       description: item.name,
-  //       amount: item.price+'.00',
-  //       quantity: item.quantity,
-  //       weight: ''
-  //   });
-  // });
-  pag.addItem({
-      id: 1,
-      description: 'Descrição do primeiro produto',
-      amount: "4230.00",
-      quantity: 3,
-      weight: 2342
+  const data = req.body;
+  console.log(data);
+  data.cart.map((item) => {
+    pag.addItem({
+        id: item.id,
+        description: item.name,
+        amount: item.price+'.00',
+        quantity: item.quantity,
+        weight: ''
+    });
   });
-
-  // const areaCode = data.billing_address.phone.substring(0, 2);
-  // const phoneNumber = data.billing_address.phone.substring(2);
   pag.currency('BRL');
   pag.setRedirectURL("http://loja.repsparta.com");
   pag.setNotificationURL("http://loja.repsparta.com/shop");
 
   pag.reference(uuid());
   pag.buyer({
-      // name: data.billing_address.first_name+' '+data.billing_address.last_name,
-      // email: data.billing_address.email,
-      // name: 'Calor Montoya',
-      // email: 'luandro@sandbox.pagseguro.com',
-      // phoneAreaCode: areaCode,
-      // phoneNumber: phoneNumber,
-      // street: data.billing_address.street,
-      // number: data.billing_address.number,
-      // postalCode: data.billing_address.cep,
-      // city: data.billing_address.city,
-      // state: data.billing_address.state,
-      name: 'Louco Abreu',
-      email: 'louco_abreu@gmail.com',
-      phoneAreaCode: '31',
-      phoneNumber: '38922827',
-      street: 'Rua',
-      number: '18',
-      postalCode: '36570000',
-      city: 'VICOSA',
-      state: 'MG',
-      country: 'BRA'
+      name: data.full_name,
+      email: data.email,
   });
   pag.send((err, payRes) => {
     if (err) {

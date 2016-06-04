@@ -8,7 +8,7 @@
  const apiUrl = process.env.API || require('../../config').api;
 
 export function paymentApi(data) {
-  const { first_name, last_name, email, phone, street, city, state, cep, cpf, number, neighborhood} = data.userInfo;
+  const { full_name, email } = data.userInfo;
   console.log(data.userInfo);
   let cart = [];
   data.cart.map((item) => {
@@ -25,51 +25,11 @@ export function paymentApi(data) {
    })
   })
   const formatedData = {
-    order: {
-     payment_details: {
-       method_id: 'pagseguro',
-       method_title: 'PagSeguro',
-       paid: false
-     },
-     billing_address: {
-       first_name,
-       last_name,
-       email,
-       phone,
-       address_1: street,
-       city,
-       state,
-       postcode: cep,
-       country: "BR",
-       persontype: "F",
-       cpf,
-       sex: false,
-       number,
-      },
-     line_items: cart,
-     customer: {
-      email,
-      first_name,
-      last_name,
-      billing_address: {
-        first_name,
-        last_name,
-        address_1: street,
-        city,
-        state,
-        postcode: cep,
-        country: "BR",
-        email,
-        phone,
-        persontype: "F",
-        cpf,
-        sex: false,
-        number,
-        neighborhood
-      }
-    }
-   }
-  }
+    full_name,
+    email,
+    cart
+  };
+  JSON.stringify(formatedData)
   return fetch(`${apiUrl}/payment`, {
     method: 'POST',
     headers: {
@@ -129,7 +89,7 @@ export function productsApi() {
 }
 
 export function ordersApi(data) {
-  const { first_name, last_name, email, phone, street, city, state, cep, cpf, number, neighborhood} = data.userInfo;
+  const { full_name, last_name, email, phone, street, city, state, cep, cpf, number, neighborhood} = data.userInfo;
   console.log(data.userInfo);
   let cart = [];
   data.cart.map((item) => {
@@ -153,7 +113,7 @@ export function ordersApi(data) {
        paid: false
      },
      billing_address: {
-       first_name,
+       full_name,
        last_name,
        email,
        phone,
@@ -170,10 +130,10 @@ export function ordersApi(data) {
      line_items: cart,
      customer: {
       email,
-      first_name,
+      full_name,
       last_name,
       billing_address: {
-        first_name,
+        full_name,
         last_name,
         address_1: street,
         city,
