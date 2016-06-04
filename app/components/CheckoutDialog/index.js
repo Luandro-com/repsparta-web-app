@@ -24,17 +24,11 @@ import styles from './styles.css';
 const sty={
   inputMin: {
     width: '100%',
-    '@media (min-width: 768px)': {
-      width: '30%',
-      margin: '0 1%',
-    },
+    
   },
   input: {
     width: '100%',
-    '@media (min-width: 768px)': {
-      width: '45%',
-      margin: '0 2%',
-    },
+
   },
   errorStyle: {
    color: '#EC1D24'

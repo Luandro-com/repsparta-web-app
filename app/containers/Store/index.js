@@ -8,7 +8,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { selectProducts, selectOrder, selectDescription, selectEventImg, selectFooter } from './selectors';
-import { fetchProducts, fetchDescription, fetchFooter, postOrder } from './actions';
+import { fetchProducts, fetchDescription, fetchFooter, startPayment } from './actions';
 
 import Intro from 'components/Intro';
 import Shop from 'components/Shop';
@@ -24,11 +24,11 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { products, order, description, postOrder, eventImg, footer } = this.props;
+    const { products, order, description, startPayment, eventImg, footer } = this.props;
     return (
       <div>
         <Intro description={description} />
-        <Shop products={products} order={order} postOrder={postOrder} eventImg={eventImg} />
+        <Shop products={products} order={order} startPayment={startPayment} eventImg={eventImg} />
         <Footer footer={footer} />
       </div>
     );
@@ -49,7 +49,7 @@ function mapDispatchToProps(dispatch) {
     fetchProducts: () => dispatch(fetchProducts()),
     fetchDescription: () => dispatch(fetchDescription()),
     fetchFooter: () => dispatch(fetchFooter()),
-    postOrder: (userInfo, cart) => dispatch(postOrder(userInfo, cart)),
+    startPayment: (userInfo, cart) => dispatch(startPayment(userInfo, cart)),
     dispatch,
   };
 }

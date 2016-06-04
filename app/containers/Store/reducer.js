@@ -6,7 +6,7 @@
 
 import { fromJS } from 'immutable';
 import {
-  SAVE_PRODUCTS, SAVE_DESCRIPTION, SAVE_FOOTER, CREATE_ORDER
+  SAVE_PRODUCTS, SAVE_DESCRIPTION, SAVE_FOOTER, START_PAYMENT, FAIL_PAYMENT, CREATE_ORDER
 } from './constants';
 
 const initialState = fromJS({
@@ -15,7 +15,8 @@ const initialState = fromJS({
   footer: null,
   products: [],
   order: {
-    loading: false
+    loading: false,
+    error: false,
   }
 });
 
@@ -31,9 +32,14 @@ function storeReducer(state = initialState, action) {
     case SAVE_FOOTER:
       return state
         .set('footer', action.payload);
-    case CREATE_ORDER:
+    case START_PAYMENT:
       return state
         .setIn(['order', 'loading'], true)
+        .setIn(['order', 'error'], false)
+    case FAIL_PAYMENT:
+      return state
+        .setIn(['order', 'loading'], false)
+        .setIn(['order', 'error'], true)
     default:
       return state;
   }

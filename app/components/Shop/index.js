@@ -8,9 +8,10 @@ import React from 'react';
 import 'whatwg-fetch';
 import CPF from 'gerador-validador-cpf';
 
-import Loader from 'halogen/PulseLoader';
+import Loader from 'halogen/SquareLoader';
 import ProductItem from 'components/ProductItem';
 import CheckoutDialog from 'components/CheckoutDialog';
+import MobileCheckoutDialog from 'components/MobileCheckoutDialog';
 
 import styles from './styles.css';
 import Divider from './divider1.svg';
@@ -125,7 +126,7 @@ class Shop extends React.Component {
       first_name_error, last_name_error, email_error, cpf_error, cep_error, phone_error
     } = this.state;
     let cart = [];
-    const { products, postOrder } = this.props;
+    const { products, startPayment } = this.props;
     products.map((item, key) => {
       const { id, title, price, } = item;
       if(this.state[`counter${id}`]) {
@@ -151,7 +152,7 @@ class Shop extends React.Component {
       }
     }
     if(!checkErrors()) {
-      postOrder({
+      startPayment({
           total,
           first_name,
           last_name,
@@ -299,11 +300,11 @@ class Shop extends React.Component {
 
   render() {
     const { total } = this.state;
-    const { products, order, postOrder, eventImg } = this.props;
+    const { products, order, startPayment, eventImg } = this.props;
     let ProductList, eventImgHolder, finish;
     eventImg
-      ? eventImgHolder = <img className={ styles.event } src={eventImg} />
-      : eventImgHolder = <Loader />
+      ? eventImgHolder = <img height={255} width={255} src={eventImg} />
+      : eventImgHolder = <Loader color={'#000'} />
     products.length > 0
       ? ProductList = (
         <div className={ styles.products }>
@@ -327,7 +328,9 @@ class Shop extends React.Component {
     return (
       <div className={ styles.wrapper }>
         <img className={ styles.divider } src={Divider} />
-        { eventImgHolder }
+        <div className={ styles.event }>
+          { eventImgHolder }
+        </div>
         { ProductList }
         <div className={ styles.action }>
           <img className={ styles.total } src={Total} />
@@ -336,7 +339,7 @@ class Shop extends React.Component {
           { finish }
           <img className={ styles.banner} src={Action} />
         </div>
-        <CheckoutDialog
+        <MobileCheckoutDialog
           props={this.state}
           products={products}
           order={order}

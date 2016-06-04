@@ -16,6 +16,11 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import styles from './styles.css';
 
 const sty={
+  modal: {
+    width: '100%',
+    height: '100%',
+    maxWidth: 'none',
+  },
   inputMin: {
     width: '100%',
   },
@@ -25,25 +30,41 @@ const sty={
   errorStyle: {
    color: '#EC1D24'
  },
+ fail: {
+   margin: '30px auto',
+   width: '85%',
+   textAlign: 'center',
+   border: '1px solid #EC1D24',
+   padding: 10,
+ }
 }
 
 function MobileCheckoutDialog({
-    close, handlePrev, handleNext, handleSubmit,
+    close, handleSubmit,
     handleCep, handleCpf, handleFirstName, handleLastName, handlePhone, handleNumber, handleEmail, handleStreet, handleNeighborhood,
     products, order, props
   }) {
   const {
-    open, finished, stepIndex,
+    open,
     first_name, last_name, email, phone, number, cpf, cep, street
   } = props;
 
-  const actions = [
+  let actions;
+  order.loading
+    ? actions = [
+      <FlatButton
+        label="Cancelar"
+        primary={true}
+        disabled={true}
+      />,
+    ]
+    : actions = [
       <FlatButton
         label="Cancelar"
         primary={true}
         onTouchTap={close}
       />,
-    ];
+    ]
   let cart = [];
   products.map((item, key) => {
     if(props[`counter${item.id}`]) {
@@ -56,42 +77,32 @@ function MobileCheckoutDialog({
       )
     }
   });
-  let finishButton;
+  let loadingButton;
   order.loading
-    ? finishButton = <div style={{paddingTop: 15}}><Loader color={'#EC1D24'} /></div>
-    : finishButton = <FlatButton label="Cancelar" primary={true} onTouchTap={handleSubmit} />
+    ? loadingButton = <div style={{display: 'flex', alignItems: 'center', color: '#EC1D24', width: '100%', padding: '50px 0'}}><Loader color={'#EC1D24'} /> <p style={{paddingLeft: 25}}>Estamos processando seu pedido...</p></div>
+    : loadingButton = <div></div>
   return (
     <div className={ styles.wrapper }>
       <Dialog
         title="Finalizar Compra"
-        className={ styles.overlay }
+        // className={ styles.overlay }
+        contentStyle={sty.modal}
         autoScrollBodyContent={true}
         actions={actions}
         modal={false}
         open={props.open}
         onRequestClose={close}>
-        <div style={{margin: 'auto'}}>
+        <div style={order.loading ? {display: 'none'} : {display: 'block'}}>
           <TextField
             style={ sty.inputMin }
-            hintText="José"
-            floatingLabelText="Primeiro nome"
+            hintText="José da Silva"
+            floatingLabelText="Nome completo"
             type="text"
             onChange={handleFirstName}
             onBlur={handleFirstName}
             errorText={props.first_name_error ? 'Este campo é obrigatório' : ''}
             errorStyle={sty.errorStyle}
             value={props.first_name}
-          />
-          <TextField
-            style={ sty.inputMin }
-            hintText="Rodriguez"
-            floatingLabelText="Sobrenome"
-            type="text"
-            onChange={handleLastName}
-            value={props.last_name}
-            onBlur={handleLastName}
-            errorText={props.last_name_error ? 'Este campo é obrigatório' : ''}
-            errorStyle={sty.errorStyle}
           />
           <TextField
             style={ sty.inputMin }
@@ -104,7 +115,7 @@ function MobileCheckoutDialog({
             errorText={props.email_error ? 'Digite um email válido' : ''}
             errorStyle={sty.errorStyle}
           />
-          <TextField
+          {/*<TextField
             style={ sty.input }
             hintText="123.456.789-10"
             floatingLabelText="CPF"
@@ -161,7 +172,7 @@ function MobileCheckoutDialog({
             type="text"
             onChange={handleNumber}
             value={props.number}
-          />
+          />*/}
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
               { cart }
@@ -174,8 +185,15 @@ function MobileCheckoutDialog({
               }
             </TableBody>
           </Table>
-          { finishButton }
+          <div style={{paddingTop: 15}}>
+            <FlatButton label="Finalizar" primary={true} onTouchTap={handleSubmit} />
+            {
+              order.error &&
+                <p style={ sty.fail }>Tivemos um erro ao tentar comunicar seu pagamento com o PagSeguro. Por favor tente novamente ou entre em contato conosco.</p>
+            }
+          </div>
         </div>
+        { loadingButton }
       </Dialog>
     </div>
   );

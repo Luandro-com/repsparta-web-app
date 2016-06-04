@@ -11,3 +11,5 @@ export const SAVE_DESCRIPTION = 'app/Store/SAVE_DESCRIPTION';
 export const CREATE_ORDER = 'app/Store/CREATE_ORDER';
 export const FETCH_FOOTER = 'app/Store/FETCH_FOOTER';
 export const SAVE_FOOTER = 'app/Store/SAVE_FOOTER';
+export const START_PAYMENT = 'app/Store/START_PAYMENT';
+export const FAIL_PAYMENT = 'app/Store/FAIL_PAYMENT';

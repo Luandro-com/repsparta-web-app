@@ -8,9 +8,19 @@ import {
   FETCH_DESCRIPTION, SAVE_DESCRIPTION,
   FETCH_PRODUCTS, SAVE_PRODUCTS,
   FETCH_FOOTER, SAVE_FOOTER,
-  CREATE_ORDER
+  START_PAYMENT, FAIL_PAYMENT, CREATE_ORDER
 } from './constants';
-
+/**
+ * Payment
+ */
+export const startPayment = (userInfo, cart) => ({
+  type: START_PAYMENT,
+  payload: {userInfo, cart}
+});
+export const failPayment = (err) => ({
+  type: FAIL_PAYMENT,
+  payload: err
+})
 /**
  * Order
  */

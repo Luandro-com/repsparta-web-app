@@ -28,11 +28,11 @@ const muiTheme = getMuiTheme({
       primary2Color: '#24358A',
       // primary3Color: grey400,
       accent1Color: '#EC1D24',
-      // accent2Color: grey100,
-      // accent3Color: grey500,
+      accent2Color: 'orange',
+      accent3Color: 'orange',
       // textColor: darkBlack,
       // alternateTextColor: white,
-      // canvasColor: white,
+      canvasColor: '#fff',
       // borderColor: grey300,
       // disabledColor: fade(darkBlack, 0.3),
       // pickerHeaderColor: cyan500,
@@ -51,7 +51,7 @@ ga.initialize('UA-78747741-1');
  * Inject Lightbox
  */
  const script = document.createElement('script');
- script.src = 'https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
+ script.src = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
  script.onload = function () {
     console.log('PagSeguro lightbox is loaded');
 };

@@ -6,6 +6,8 @@ const logger = require('./logger');
 const ngrok = require('ngrok');
 const WooCommerceAPI = require('woocommerce-api');
 const pagseguro = require('pagseguro');
+const XMLparser = require('xml2json');
+const uuid = require('node-uuid').v4;
 const frontend = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -16,32 +18,15 @@ app.use(bodyParser.json())
 const configAdminUrl = process.env.ADMINURL || require('../config').adminUrl;
 const configConsumerKey = process.env.CONSUMERKEY || require('../config').consumerKey;
 const configConsumerSecret = process.env.CONSUMERSECRET || require('../config').consumerSecret;
-
+const configToken = process.env.TOKEN || require('../config').token;
+const configEmail = process.env.EMAIL || require('../config').email;
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
-// app.use('/api', myApi);
 
 const pag = new pagseguro({
-  email : 'luandro@gmail.com',
-  token: '341CF7978F82449B9672F66A28A73E43',
+  email : configEmail,
+  token: configToken,
   mode : 'sandbox'
 });
-pag.currency('BRL');
-pag.reference('12345');
-pag.addItem({
-    id: 1,
-    description: 'Descrição do primeiro produto',
-    amount: "4230.00",
-    quantity: 3,
-    weight: 2342
-});
-pag.buyer({
-    name: 'José Comprador',
-    email: 'comprador@uol.com.br',
-    phoneAreaCode: '51',
-    phoneNumber: '12345678'
-});
-pag.setRedirectURL("http://loja.repsparta.com");
-pag.setNotificationURL("http://loja.repsparta.com/shop");
 
 const WooCommerce = new WooCommerceAPI({
   url: configAdminUrl,
@@ -49,14 +34,80 @@ const WooCommerce = new WooCommerceAPI({
   consumerSecret: configConsumerSecret,
 });
 
-app.get('/api/payment', (req, res) => {
-  pag.send((err, res) => {
-        if (err) {
-            console.log(err);
-        }
-        console.log(res);
-    });
-})
+/**
+ * Payment API
+ */
+app.post('/api/payment', (req, res) => {
+  const data = req.body.order;
+  // data.line_items.map((item) => {
+  //   pag.addItem({
+  //       id: item.id,
+  //       description: item.name,
+  //       amount: item.price+'.00',
+  //       quantity: item.quantity,
+  //       weight: ''
+  //   });
+  // });
+  pag.addItem({
+      id: 1,
+      description: 'Descrição do primeiro produto',
+      amount: "4230.00",
+      quantity: 3,
+      weight: 2342
+  });
+
+  // const areaCode = data.billing_address.phone.substring(0, 2);
+  // const phoneNumber = data.billing_address.phone.substring(2);
+  pag.currency('BRL');
+  pag.setRedirectURL("http://loja.repsparta.com");
+  pag.setNotificationURL("http://loja.repsparta.com/shop");
+
+  pag.reference(uuid());
+  pag.buyer({
+      // name: data.billing_address.first_name+' '+data.billing_address.last_name,
+      // email: data.billing_address.email,
+      // name: 'Calor Montoya',
+      // email: 'luandro@sandbox.pagseguro.com',
+      // phoneAreaCode: areaCode,
+      // phoneNumber: phoneNumber,
+      // street: data.billing_address.street,
+      // number: data.billing_address.number,
+      // postalCode: data.billing_address.cep,
+      // city: data.billing_address.city,
+      // state: data.billing_address.state,
+      name: 'Louco Abreu',
+      email: 'louco_abreu@gmail.com',
+      phoneAreaCode: '31',
+      phoneNumber: '38922827',
+      street: 'Rua',
+      number: '18',
+      postalCode: '36570000',
+      city: 'VICOSA',
+      state: 'MG',
+      country: 'BRA'
+  });
+  pag.send((err, payRes) => {
+    if (err) {
+      console.log(err);
+    }
+    const formatedData = XMLparser.toJson(payRes, {object: true});
+    console.log(formatedData);
+    if(formatedData.checkout) {
+      res.status(200).json({
+        ok: true,
+        code: formatedData.checkout.code
+      });
+    } else {
+      res.status(404).json({
+        ok: false
+      })
+    }
+  });
+  console.log('========================= PAYMENT ==============================');
+});
+/**
+ * tests
+ */
 app.get('/api/latest', (req, res) => {
   WooCommerce.get('orders/'+req.param, (err, wooRes) => {
     console.log(wooRes);
@@ -81,7 +132,7 @@ app.get('/api/products', (req, res) => {
   console.log(configConsumerSecret);
 
   WooCommerce.get('products', (err, data, response) => {
-    if(data.statusCode === 200) {
+    if(data && data.statusCode === 200) {
       const formatedData = JSON.parse(response)
       res.status(200).json(formatedData);
     } else {

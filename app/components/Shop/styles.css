@@ -12,12 +12,24 @@
   width: 100%;
 }
 .event {
+  margin: 0 auto;
   background: #fff;
   border-radius: 50%;
   padding: 15px;
+  width: 300px;
+  height: 300px;
   position: relative;
   top: -150px;
   max-width: 60%;
+  display: flex;
+  align-items: center;
+}
+.event div {
+  margin: 0 auto;
+}
+.event img {
+  margin: 0 auto;
+  border-radius: 50%;
 }
 .products {
   max-width: 90%;

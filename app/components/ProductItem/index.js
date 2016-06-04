@@ -16,30 +16,30 @@ const sty = {
   select: {
     background: '#fff',
     width: '75%',
-    '@media (min-width: 768px)': {
-        width: '50%',
-        padding: '31px 15px',
-        borderRadius: 35,
-        textAlign: 'center',
-      }
+    // '@media (min-width: 768px)': {
+    //     width: '50%',
+    //     padding: '31px 15px',
+    //     borderRadius: 35,
+    //     textAlign: 'center',
+    //   }
   },
   underline: {
     display: 'none'
   },
   label: {
     color: '#0D1332',
-    '@media (min-width: 720px)': {
-      top: -24,
-      paddingRight: 88,
-    }
+    // '@media (min-width: 720px)': {
+    //   top: -24,
+    //   paddingRight: 88,
+    // }
   },
   icon: {
     fill: '#0D1332',
-    '@media (min-width: 720px)': {
-      top: -18,
-      width: 40,
-      height: 40,
-    }
+    // '@media (min-width: 720px)': {
+    //   top: -18,
+    //   width: 40,
+    //   height: 40,
+    // }
   }
 }
 
