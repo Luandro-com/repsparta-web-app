@@ -11,7 +11,6 @@ import CPF from 'gerador-validador-cpf';
 import Loader from 'halogen/SquareLoader';
 import ProductItem from 'components/ProductItem';
 import CheckoutDialog from 'components/CheckoutDialog';
-import MobileCheckoutDialog from 'components/MobileCheckoutDialog';
 
 import styles from './styles.css';
 import Divider from './divider1.svg';
@@ -339,7 +338,7 @@ class Shop extends React.Component {
           { finish }
           <img className={ styles.banner} src={Action} />
         </div>
-        <MobileCheckoutDialog
+        <CheckoutDialog
           props={this.state}
           products={products}
           order={order}

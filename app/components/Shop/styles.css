@@ -20,7 +20,7 @@
   height: 300px;
   position: relative;
   top: -150px;
-  max-width: 60%;
+  max-width: 90%;
   display: flex;
   align-items: center;
 }
@@ -103,6 +103,7 @@
 @media (min-width: 1024px) {
   .event {
     top: -300px;
+    max-width: 60%;
   }
   .divider {
     top: -30px;

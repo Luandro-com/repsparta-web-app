@@ -9,6 +9,7 @@ import Radium from 'radium';
 
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
 
 import styles from './styles.css';
 
@@ -40,6 +41,10 @@ const sty = {
     //   width: 40,
     //   height: 40,
     // }
+  },
+  counter: {
+    borderRadius: 0,
+    minWidth: 25
   }
 }
 
@@ -91,8 +96,8 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
         <div className={ styles.counter }>
           <span className={ styles.num }>{ counter }</span>
           <div className={ styles.buttons }>
-            <span className={ styles.plus } onClick={inc}>+</span>
-            <span className={ styles.minus } onClick={dec}>-</span>
+            <FlatButton backgroundColor="#EC1D24" label='+' hoverColor="#fff" style={ sty.counter } onClick={inc} />
+            <FlatButton backgroundColor="#FFCA05" label='-' hoverColor="#fff" style={ sty.counter } onClick={dec} />
           </div>
         </div>
       </div>

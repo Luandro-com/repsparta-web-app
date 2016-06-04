@@ -53,7 +53,7 @@
   font-size: 1.5em;
 }
 .counter {
-  width: 5%;
+  width: 8%;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -68,16 +68,6 @@
   display: flex;
   flex-flow: column;
   margin-top: -15px;
-}
-.plus, .minus {
-  padding: 4px 12px;
-  margin: 2px 0;
-}
-.plus {
-  background-color: #EC1D24;
-}
-.minus {
-  background-color: #FFCA05;
 }
 .price {
   padding: 25px 0;
@@ -129,10 +119,6 @@
 
 }
 @media (min-width: 1024px) {
-  .plus, .minus {
-    padding: 1px 8px;
-    margin: 0.5px 0;
-  }
   .info {
     width: 40%;
   }
