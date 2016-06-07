@@ -3,13 +3,11 @@
  */
  import 'whatwg-fetch';
  const adminUrl = process.env.ADMINURL || require('../../config').adminUrl;
- const descriptionPostId = process.env.DESCRIPTION || require('../../config').description;
- const footerPostId = process.env.FOOTER || require('../../config').footer;
  const apiUrl = process.env.API || require('../../config').api;
 
 export function paymentApi(data) {
-  const { full_name, email } = data.userInfo;
-  console.log(data.userInfo);
+  const { full_name, email } = data;
+  console.log(data);
   let cart = [];
   data.cart.map((item) => {
     const { price, name, product_id, quantity, meta} = item;
@@ -46,8 +44,8 @@ export function paymentApi(data) {
     return err;
   })
 }
-export function descriptionApi() {
-  return fetch(`${adminUrl}/wp-json/wp/v2/posts/${descriptionPostId}`)
+export function postsApi() {
+  return fetch(`${adminUrl}/wp-json/wp/v2/posts`)
   .then((res) => {
     return res.json();
   })
@@ -56,18 +54,9 @@ export function descriptionApi() {
     return err;
   })
 }
-export function eventImageApi(mediaId) {
+
+export function imageApi(mediaId) {
   return fetch(`${adminUrl}/wp-json/wp/v2/media/${mediaId}`)
-  .then((res) => {
-    return res.json();
-  })
-  .catch((err) => {
-    console.log(err);
-    return err;
-  })
-}
-export function footerApi() {
-  return fetch(`${adminUrl}/wp-json/wp/v2/posts/${footerPostId}`)
   .then((res) => {
     return res.json();
   })
@@ -88,11 +77,30 @@ export function productsApi() {
   })
 }
 
+export function completeOrderApi(data) {
+  console.log(data);
+  return fetch(`${apiUrl}/order_complete`, {
+    method: 'PUT',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then((res) => {
+    return res.json();
+  })
+  .catch((err) => {
+    console.log(err);
+    return err;
+  })
+
+}
+
 export function ordersApi(data) {
-  const { full_name, last_name, email, phone, street, city, state, cep, cpf, number, neighborhood} = data.userInfo;
-  console.log(data.userInfo);
+  console.log(data);
   let cart = [];
-  data.cart.map((item) => {
+  data.payload.cart.map((item) => {
     const { price, name, product_id, quantity, meta} = item;
     cart.push({
      id: product_id,
@@ -104,51 +112,29 @@ export function ordersApi(data) {
      product_id,
      meta
    })
-  })
-  const formatedData = {
+ });
+ const { full_name, total, email } = data.payload;
+ const first_name = full_name.split(' ')[0];
+ const last_name = full_name.split(' ')[1];
+ const formatedData = {
     order: {
+     id: data.id,
+     status: 'pending',
+     total,
      payment_details: {
        method_id: 'pagseguro',
        method_title: 'PagSeguro',
        paid: false
      },
      billing_address: {
-       full_name,
+       first_name,
        last_name,
        email,
-       phone,
-       address_1: street,
-       city,
-       state,
-       postcode: cep,
        country: "BR",
        persontype: "F",
-       cpf,
        sex: false,
-       number,
-      },
-     line_items: cart,
-     customer: {
-      email,
-      full_name,
-      last_name,
-      billing_address: {
-        full_name,
-        last_name,
-        address_1: street,
-        city,
-        state,
-        postcode: cep,
-        country: "BR",
-        email,
-        phone,
-        persontype: "F",
-        cpf,
-        sex: false,
-        number,
-        neighborhood
-      }
-    }
+     },
+     line_items: cart
    }
   }
   console.log('BODY', formatedData);

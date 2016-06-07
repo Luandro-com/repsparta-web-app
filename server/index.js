@@ -134,6 +134,32 @@ app.post('/api/order', (req, res) => {
     }
 
    });
+});
+app.put('/api/order_complete', (req, res) => {
+  const id = req.body.paymentCode;
+  const transaction_id = req.body.transactionCode
+  var data = {
+    status: 'completed',
+    set_paid: true,
+    transaction_id 
+  };
+  WooCommerce.put('orders/'+data, data, (error, data, wooRes) => {
+    console.log(JSON.parse(wooRes));
+    console.log('--------------------------------------------------------');
+    const formatedWoo = JSON.parse(wooRes);
+    if(formatedWoo.order) {
+      res.send({
+        ok: true,
+        order_number: formatedWoo.order.order_number,
+        order_key: formatedWoo.order.order_key
+      })
+    } else {
+      res.send({
+        ok: false
+      })
+    }
+
+   });
 })
 
 

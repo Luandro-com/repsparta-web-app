@@ -28,19 +28,29 @@ const selectOrder = () => createSelector(
   (globalState) => globalState.get('order').toJS()
 );
 
-const selectDescription = () => createSelector(
-  selectStoreDomain(),
-  (globalState) => globalState.get('description')
-);
+// const selectHeaderImg = () => createSelector(
+//   selectStoreDomain(),
+//   (globalState) => globalState.get('headerImg')
+// );
+//
+// const selectDescription = () => createSelector(
+//   selectStoreDomain(),
+//   (globalState) => globalState.get('description')
+// );
+//
+// const selectEventImg = () => createSelector(
+//   selectStoreDomain(),
+//   (globalState) => globalState.get('eventImg')
+// );
+//
+// const selectFooter = () => createSelector(
+//   selectStoreDomain(),
+//   (globalState) => globalState.get('footer')
+// );
 
-const selectEventImg = () => createSelector(
+const selectContent = () => createSelector(
   selectStoreDomain(),
-  (globalState) => globalState.get('eventImg')
-);
-
-const selectFooter = () => createSelector(
-  selectStoreDomain(),
-  (globalState) => globalState.get('footer')
+  (globalState) => globalState.get('content').toJS()
 );
 
 export default selectStore;
@@ -48,7 +58,8 @@ export {
   selectStoreDomain,
   selectProducts,
   selectOrder,
-  selectDescription,
-  selectEventImg,
-  selectFooter
+  selectContent
+  // selectDescription,
+  // selectEventImg,
+  // selectFooter
 };

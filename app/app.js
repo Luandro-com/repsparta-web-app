@@ -47,16 +47,6 @@ injectTapEventPlugin();
 import ga from 'react-ga';
 ga.initialize('UA-78747741-1');
 
-/**
- * Inject Lightbox
- */
- const script = document.createElement('script');
- script.src = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
- script.onload = function () {
-    console.log('PagSeguro lightbox is loaded');
-};
-document.head.appendChild(script); //or something of the likes
-
 // Import the CSS reset, which HtmlWebpackPlugin transfers to the build folder
 import 'sanitize.css/lib/sanitize.css';
 
@@ -74,6 +64,18 @@ import { selectLocationState } from 'containers/App/selectors';
 const history = syncHistoryWithStore(browserHistory, store, {
   selectLocationState: selectLocationState(),
 });
+
+/**
+ * Inject Lightbox
+ */
+import { lightboxLoaded } from 'containers/Store/actions'
+ const script = document.createElement('script');
+ script.src = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
+ script.onload = function () {
+    console.log('PagSeguro lightbox is loaded');
+    store.dispatch(lightboxLoaded())
+};
+document.head.appendChild(script); //or something of the likes
 
 // Set up the router, wrapping all Routes in the App component
 import App from 'containers/App';

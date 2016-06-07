@@ -5,21 +5,28 @@
  */
 
 import {
-  FETCH_DESCRIPTION, SAVE_DESCRIPTION,
+  FETCH_CONTENT, SAVE_CONTENT,
   FETCH_PRODUCTS, SAVE_PRODUCTS,
-  FETCH_FOOTER, SAVE_FOOTER,
-  START_PAYMENT, FAIL_PAYMENT, CREATE_ORDER
+  START_PAYMENT, FAIL_PAYMENT, CREATE_ORDER,
+  LIGHTBOX_OPEN, LIGHTBOX_LOADED, SUCCESS_PAYMENT
 } from './constants';
 /**
  * Payment
  */
-export const startPayment = (userInfo, cart) => ({
+export const startPayment = (data) => ({
   type: START_PAYMENT,
-  payload: {userInfo, cart}
+  payload: data
 });
 export const failPayment = (err) => ({
   type: FAIL_PAYMENT,
   payload: err
+});
+export const lightboxLoaded = () => ({
+  type: LIGHTBOX_LOADED
+})
+export const openLightbox = (code) => ({
+  type: LIGHTBOX_OPEN,
+  payload: code
 })
 /**
  * Order
@@ -28,29 +35,26 @@ export const postOrder = (userInfo, cart) => ({
   type: CREATE_ORDER,
   payload: {userInfo, cart}
 });
+export const completeOrder = (data) => ({
+  type: SUCCESS_PAYMENT,
+  payload: data
+})
 /**
- * Description
+ * Content
  */
-export const fetchDescription = () => ({
-    type: FETCH_DESCRIPTION,
+export const fetchContent = () => ({
+    type: FETCH_CONTENT,
  });
 
-export const saveDescription = (description, eventImg) => ({
-   type: SAVE_DESCRIPTION,
-   payload: { description, eventImg }
+export const saveContent = (data) => ({
+   type: SAVE_CONTENT,
+   payload: {
+     headerImg: data.republicasImg,
+     republicas: data.republicas,
+     description: data.descricao ,
+     eventImg: data.descricaoImg,
+     footer: data.rodape }
  });
-
- /**
-  * Footer
-  */
-export const fetchFooter = () => ({
-  type: FETCH_FOOTER,
-});
-
-export const saveFooter = (text) => ({
-  type: SAVE_FOOTER,
-  payload: text
-});
 
 /**
  * Products

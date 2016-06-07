@@ -1,58 +1,49 @@
 import {
   FETCH_PRODUCTS,
-  FETCH_DESCRIPTION,
-  FETCH_FOOTER,
+  FETCH_CONTENT,
   CREATE_ORDER,
   START_PAYMENT,
-  FAIL_PAYMENT
+  FAIL_PAYMENT,
+  SUCCESS_PAYMENT
 } from './constants';
 import {
   take,
   call,
   put,
-  select
+  select,
+  cps
 } from 'redux-saga/effects';
 import {
   saveProducts,
-  saveDescription,
-  saveFooter,
-  failPayment
+  saveContent,
+  failPayment,
+  openLightbox
 } from './actions';
 import {
+  ordersApi,
   paymentApi,
   productsApi,
-  descriptionApi,
-  eventImageApi,
-  footerApi
+  postsApi,
+  imageApi,
+  completeOrderApi
 } from '../../utils/api';
-
 // All sagas to be loaded
 export default [
   getProducts,
-  getDescription,
-  getFooter,
-  createPayment
+  getContent,
+  createPayment,
 ];
 
 /**
  * SAGAS
  */
-function lightBox(code) {
-  return PagSeguroLightbox({
-    code,
-  }, {
-    success: (transactionCode) => {
-      alert("success - " + transactionCode);
-      createOrder(transactionCode);
-    },
-    abort: () => {
-      console.log('ABORTED');
-    }
-  })
-}
-export function* createOrder(code) {
-  const order = yield call(ordersApi, code);
-  console.log(order);
+export function* completePayment() {
+  while(true) {
+    const action = yield take(SUCCESS_PAYMENT);
+    console.log(action.payload);
+    const order = yield call(completeOrderApi, action.payload)
+    console.log(order);
+  }
 }
 export function* createPayment() {
   while (true) {
@@ -61,10 +52,14 @@ export function* createPayment() {
     const payment = yield call(paymentApi, action.payload)
     console.log(payment);
     if (payment.ok) {
-      const lightbox = yield call(lightBox, payment.code);
-      if(!lightbox) {
-        yield put(failPayment(payment));
+      // const { total, full_name, email } = action.payload.paymentInfo;
+      const data = {
+        id: payment.code,
+        payload: action.payload
       }
+      const order = yield call(ordersApi, data)
+      console.log('order: ', order);
+      yield put(openLightbox(payment.code));
     } else {
       yield put(failPayment(payment));
     }
@@ -79,24 +74,22 @@ export function* getProducts() {
     }
   }
 }
-export function* getDescription() {
+export function* getContent() {
   while (true) {
-    yield take(FETCH_DESCRIPTION);
-    const description = yield call(descriptionApi);
-    if (description) {
-      const img = yield call(eventImageApi, description.featured_media);
-      if (img) {
-        yield put(saveDescription(description.content.rendered, img.source_url));
+    yield take(FETCH_CONTENT);
+    const content = yield call(postsApi);
+    if (content) {
+      let data = {};
+      for(let item of content) {
+        data[item.slug] = item.content.rendered;
+        if(item.featured_media) {
+            const img = yield call(imageApi, item.featured_media);
+            if (img) {
+              data[`${item.slug}Img`] = img.source_url;
+            }
+        }
       }
-    }
-  }
-}
-export function* getFooter() {
-  while (true) {
-    yield take(FETCH_FOOTER);
-    const footer = yield call(footerApi);
-    if (footer) {
-      yield put(saveFooter(footer.content.rendered));
+      yield put(saveContent(data));
     }
   }
 }

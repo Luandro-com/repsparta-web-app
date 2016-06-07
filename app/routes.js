@@ -37,7 +37,15 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/success/:id',
+      getComponent(location, cb) {
+        System.import('components/SuccessPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       path: '*',
+
       name: 'notfound',
       getComponent(nextState, cb) {
         System.import('components/NotFoundPage')

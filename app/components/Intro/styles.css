@@ -14,6 +14,25 @@
   width: 100%;
   padding: 50px 0;
 }
+.republicas_wrapper {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+.republicas {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 50%;
+  height: 135px;
+  width: 135px
+}
+.republicas img {
+  max-width: 125px;
+  margin: 0 auto;
+}
 .title {
   min-width: 300px;
   max-width: 95%;

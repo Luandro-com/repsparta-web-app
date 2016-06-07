@@ -7,8 +7,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { selectProducts, selectOrder, selectDescription, selectEventImg, selectFooter } from './selectors';
-import { fetchProducts, fetchDescription, fetchFooter, startPayment } from './actions';
+import { push } from 'react-router-redux'
+import { selectProducts, selectOrder, selectContent } from './selectors';
+import { fetchProducts, fetchContent, startPayment, failPayment, completeOrder } from './actions';
 
 import Intro from 'components/Intro';
 import Shop from 'components/Shop';
@@ -17,19 +18,42 @@ import Footer from 'components/Footer';
 export class Store extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   componentDidMount() {
-    const { fetchProducts, fetchDescription, fetchFooter } = this.props;
-    fetchFooter();
+    const { fetchProducts, fetchContent } = this.props;
+    fetchContent();
     fetchProducts();
-    fetchDescription();
+  }
+  componentDidUpdate() {
+    const { failPayment, changeRoute, completeOrder } = this.props;
+    const { lightboxLoaded, lightboxOpen, paymentCode } = this.props.order;
+    console.log(this.props.order);
+    if(lightboxLoaded && lightboxOpen) {
+      // console.log('IM in', paymentCode);
+      PagSeguroLightbox({
+        code: paymentCode
+      }, {
+          success : (transactionCode) => {
+          completeOrder({paymentCode, transactionCode});
+          // changeRoute(`/success/${transactionCode}`);
+        },
+          abort : () => {
+          failPayment({ok: false, err: 'Abort'});
+        }
+      });
+      // console.log(isLightboxOpen);
+      // if (!isLightboxOpen){
+      // location.href="https://pagseguro.uol.com.br/v2/checkout/payment.html?code="+code;
+      // }
+    }
   }
 
   render() {
-    const { products, order, description, startPayment, eventImg, footer } = this.props;
+    const { products, order, startPayment, content } = this.props;
+    console.log(content);
     return (
       <div>
-        <Intro description={description} />
-        <Shop products={products} order={order} startPayment={startPayment} eventImg={eventImg} />
-        <Footer footer={footer} />
+        <Intro description={content.description} headerImg={content.headerImg} republicas={content.republicas} />
+        <Shop products={products} order={order} startPayment={startPayment} eventImg={content.eventImg} />
+        <Footer footer={content.footer} />
       </div>
     );
   }
@@ -38,18 +62,18 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
 const mapStateToProps = createSelector(
   selectProducts(),
   selectOrder(),
-  selectDescription(),
-  selectEventImg(),
-  selectFooter(),
-  (products, order, description, eventImg, footer) => ({ products, order, description, eventImg, footer })
+  selectContent(),
+  (products, order, content) => ({ products, order, content })
 );
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchProducts: () => dispatch(fetchProducts()),
-    fetchDescription: () => dispatch(fetchDescription()),
-    fetchFooter: () => dispatch(fetchFooter()),
+    fetchContent: () => dispatch(fetchContent()),
     startPayment: (userInfo, cart) => dispatch(startPayment(userInfo, cart)),
+    failPayment: (err) => dispatch(failPayment(err)),
+    changeRoute: (route) => dispatch(push(route)),
+    completeOrder: (data) => dispatch(completeOrder(data)),
     dispatch,
   };
 }

@@ -135,8 +135,9 @@ class Shop extends React.Component {
       startPayment({
           total,
           full_name,
-          email
-        }, cart);
+          email,
+          cart
+        });
     }
   }
 

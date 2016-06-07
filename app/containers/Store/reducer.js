@@ -6,32 +6,50 @@
 
 import { fromJS } from 'immutable';
 import {
-  SAVE_PRODUCTS, SAVE_DESCRIPTION, SAVE_FOOTER, START_PAYMENT, FAIL_PAYMENT, CREATE_ORDER
+  SAVE_PRODUCTS, SAVE_CONTENT, START_PAYMENT, FAIL_PAYMENT, CREATE_ORDER,
+  LIGHTBOX_OPEN, LIGHTBOX_LOADED
 } from './constants';
 
 const initialState = fromJS({
-  description: null,
-  eventImg: null,
-  footer: null,
+  content: {
+    headerImg: undefined,
+    republicas: [],
+    description: null,
+    eventImg: null,
+    footer: null,
+  },
   products: [],
   order: {
     loading: false,
     error: false,
+    lightboxLoaded: false,
+    lightboxOpen: false,
+    paymentCode: null,
   }
 });
-
+function extractContent(html) {
+  const span= document.createElement('span');
+  span.innerHTML= html;
+  const imgs = span.getElementsByTagName('img');
+  let srcList = [];
+  for (var i = 0; i < imgs.length; i++) {
+    srcList.push(imgs[i].src);
+  }
+  return srcList;
+};
 function storeReducer(state = initialState, action) {
   switch (action.type) {
     case SAVE_PRODUCTS:
       return state
         .set('products', action.payload);
-    case SAVE_DESCRIPTION:
+    case SAVE_CONTENT:
+      const reps = extractContent(action.payload.republicas);
       return state
-        .set('description', action.payload.description)
-        .set('eventImg', action.payload.eventImg)
-    case SAVE_FOOTER:
-      return state
-        .set('footer', action.payload);
+        .setIn(['content', 'headerImg'], action.payload.headerImg)
+        .setIn(['content', 'republicas'], reps)
+        .setIn(['content', 'description'], action.payload.description)
+        .setIn(['content', 'eventImg'], action.payload.eventImg)
+        .setIn(['content', 'footer'], action.payload.footer)
     case START_PAYMENT:
       return state
         .setIn(['order', 'loading'], true)
@@ -40,6 +58,15 @@ function storeReducer(state = initialState, action) {
       return state
         .setIn(['order', 'loading'], false)
         .setIn(['order', 'error'], true)
+        .setIn(['order', 'lightboxOpen'], false)
+        .setIn(['order', 'paymentCode'], null)
+    case LIGHTBOX_LOADED:
+      return state
+        .setIn(['order', 'lightboxLoaded'], true)
+    case LIGHTBOX_OPEN:
+      return state
+        .setIn(['order', 'lightboxOpen'], true)
+        .setIn(['order', 'paymentCode'], action.payload)
     default:
       return state;
   }

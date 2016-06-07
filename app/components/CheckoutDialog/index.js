@@ -43,7 +43,7 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products
   order.loading
     ? actions = [
       <FlatButton
-        label="Cancelar"
+        label="Aguarde..."
         primary={true}
         disabled={true}
       />,
@@ -68,8 +68,21 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products
     }
   });
   let loadingButton;
+
   order.loading
-    ? loadingButton = <div style={{display: 'flex', alignItems: 'center', color: '#EC1D24', width: '100%', padding: '50px 0'}}><Loader color={'#EC1D24'} /> <p style={{paddingLeft: 25}}>Estamos processando seu pedido...</p></div>
+    ? order.lightboxOpen
+        ? loadingButton = (
+          <div style={{display: 'flex', alignItems: 'center', color: '#8CD790', width: '100%', padding: '50px 0'}}>
+            <Loader color={'#8CD790'} />
+            <p style={{paddingLeft: 25}}>Seu pedido foi aceito, estamos abrindo a janela do PagSeguro. Caso a janela não abra <a href={`https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=${order.paymentCode}`}>clique aqui</a> para finalizar a compra.</p>
+          </div>
+        )
+        : loadingButton = (
+          <div style={{display: 'flex', alignItems: 'center', color: '#EC1D24', width: '100%', padding: '50px 0'}}>
+            <Loader color={'#EC1D24'} />
+            <p style={{paddingLeft: 25}}>Estamos processando seu pedido...</p>
+          </div>
+        )
     : loadingButton = <div></div>
   return (
     <div className={ styles.wrapper }>
