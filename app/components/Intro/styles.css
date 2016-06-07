@@ -26,11 +26,11 @@
   align-items: center;
   background: #fff;
   border-radius: 50%;
-  height: 135px;
-  width: 135px
+  height: 80px;
+  width: 80px
 }
 .republicas img {
-  max-width: 125px;
+  max-width: 75px;
   margin: 0 auto;
 }
 .title {
@@ -50,6 +50,18 @@
   padding: 50px 0;
 }
 @media (min-width: 768px) {
+  .republicas {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 50%;
+    height: 135px;
+    width: 135px
+  }
+  .republicas img {
+    max-width: 125px;
+    margin: 0 auto;
+  }
 
 }
 @media (min-width: 1024px) {

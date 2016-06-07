@@ -19,6 +19,7 @@
   margin: 0 auto;
   position: relative;
   top: 30px;
+  z-index: 999;
 }
 .bot_divider {
   width: 100%;
@@ -36,6 +37,10 @@
   width: 85%;
   margin: 0 auto;
   text-align: left;
+}
+.footer_container a {
+  font-size: 0.7em;
+  color: #000;
 }
 .facebook {
 
