@@ -37,7 +37,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
-      path: '/success/:id',
+      path: '/success/:payment/:transaction',
       getComponent(location, cb) {
         System.import('components/SuccessPage')
           .then(loadModule(cb))

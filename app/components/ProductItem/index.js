@@ -80,7 +80,7 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
             </SelectField>
         }
         {
-          type === 'simple' &&
+          type === 'simple' && stock_quantity > 0 &&
           <div className={ styles.simple_container }>
             <div className={ styles.simple_product }>
               {stock_quantity} <span className={ styles.restantes}>restantes</span>
@@ -95,7 +95,7 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
               .filter((item) => item.attributes[0].option === selected)
               .map((res, key) => <span key={key} className={ styles.stock_num}>{res.stock_quantity}</span>)
             }
-            <span className={ styles.stock_text }>vagas</span>
+            <span className={ styles.stock_text }>disponíveis</span>
           </div>
         }
         <div className={ styles.counter }>

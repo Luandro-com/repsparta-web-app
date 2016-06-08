@@ -110,18 +110,32 @@ class Shop extends React.Component {
     let cart = [];
     const { products, startPayment } = this.props;
     products.map((item, key) => {
-      const { id, title, price, } = item;
+      const { id, title, price, variations} = item;
       if(this.state[`counter${id}`]) {
+        const variation = variations
+        .filter((variation) => {
+          return variation.attributes[0].option === this.state[`selected${id}`];
+        });
+        let variation_id, meta;
+        variation[0]
+          ? variation_id = variation[0].id
+          : variation_id = undefined
+
+        variation[0]
+          ? meta = {
+                key: variation[0].attributes[0].name,
+                value: variation[0].attributes[0].option
+              }
+          : meta = [];
+
         cart.push({
           name: title,
           price,
+          total: this.state.total.toString(),
           product_id: id,
+          variation_id,
           quantity: this.state[`counter${id}`],
-          meta: [{
-            key: "republica",
-            label: "República",
-            value: this.state[`selected${id}`]
-          }]
+          meta,
         })
       }
     });

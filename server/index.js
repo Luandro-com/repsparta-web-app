@@ -50,10 +50,10 @@ app.post('/api/payment', (req, res) => {
     });
   });
   pag.currency('BRL');
-  pag.setRedirectURL("http://loja.repsparta.com");
-  pag.setNotificationURL("http://loja.repsparta.com/shop");
+  pag.setRedirectURL("http://localhost:3000/success");
+  pag.setNotificationURL("http://localhost:3000/api/payment_success");
 
-  pag.reference(uuid());
+  pag.reference(data.ref);
   pag.buyer({
       name: data.full_name,
       email: data.email,
@@ -83,14 +83,13 @@ app.post('/api/payment', (req, res) => {
 app.get('/api/latest', (req, res) => {
   WooCommerce.get('orders/'+req.param, (err, wooRes) => {
     console.log(wooRes);
-    console.log('===================================');
+    console.log('===========  ========================');
     res.send(JSON.parse(wooRes.body));
   })
 })
 app.get('/api/latests', (req, res) => {
   WooCommerce.get('orders', (err, wooRes) => {
-    console.log(wooRes);
-    console.log('===================================');
+    console.log('============= LATEST ORDERS ======================');
     res.send(JSON.parse(wooRes.body));
   })
 })
@@ -113,13 +112,13 @@ app.get('/api/products', (req, res) => {
   })
 })
 /**
- * Orders API
+ * POST Orders API
  */
 app.post('/api/order', (req, res) => {
   const data = req.body;
   WooCommerce.post('orders', data, (error, data, wooRes) => {
     console.log(JSON.parse(wooRes));
-    console.log('--------------------------------------------------------');
+    console.log('----------------------- ORDER ------------------------------');
     const formatedWoo = JSON.parse(wooRes);
     if(formatedWoo.order) {
       res.send({
@@ -135,13 +134,46 @@ app.post('/api/order', (req, res) => {
 
    });
 });
+/**
+ * Post Order Notes API
+ */
+ app.post('/api/order_notes', (req, res) => {
+   const data = req.body;
+   WooCommerce.post(`orders/${data.id}/notes`, data.notes, (error, data, wooRes) => {
+     console.log(JSON.parse(wooRes));
+     console.log('----------------------- NOTES ------------------------------');
+     const formatedWoo = JSON.parse(wooRes);
+     if(formatedWoo.order) {
+       res.send({
+         ok: true,
+         order_number: formatedWoo.order.order_number,
+         order_key: formatedWoo.order.order_key
+       })
+     } else {
+       res.send({
+         ok: false
+       })
+     }
+
+    });
+ });
+ /**
+  * PAYMENT SUCCESS
+  */
+app.post('/api/payment_success', (req, res) => {
+  console.log(req.body);
+});
+
+/**
+ * PUT Order complete API
+ */
 app.put('/api/order_complete', (req, res) => {
   const id = req.body.paymentCode;
   const transaction_id = req.body.transactionCode
   var data = {
     status: 'completed',
     set_paid: true,
-    transaction_id 
+    transaction_id
   };
   WooCommerce.put('orders/'+data, data, (error, data, wooRes) => {
     console.log(JSON.parse(wooRes));

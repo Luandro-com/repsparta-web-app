@@ -20,6 +20,7 @@ import {
   openLightbox
 } from './actions';
 import {
+  orderNotesApi,
   ordersApi,
   paymentApi,
   productsApi,
@@ -31,11 +32,12 @@ import {
 export default [
   getProducts,
   getContent,
-  createPayment,
+  startPayment,
+  completePayment
 ];
 
 /**
- * SAGAS
+ * Complete payment
  */
 export function* completePayment() {
   while(true) {
@@ -45,26 +47,43 @@ export function* completePayment() {
     console.log(order);
   }
 }
-export function* createPayment() {
+/**
+ * Start payment
+ */
+export function* startPayment() {
   while (true) {
     const action = yield take(START_PAYMENT);
-    console.log(action.payload);
-    const payment = yield call(paymentApi, action.payload)
-    console.log(payment);
-    if (payment.ok) {
-      // const { total, full_name, email } = action.payload.paymentInfo;
-      const data = {
-        id: payment.code,
-        payload: action.payload
+    const order = yield call(ordersApi, action.payload);
+    if(order.ok) {
+      const noteData = {
+        id: order.order_number,
+        notes: {
+          order_note: {
+            note: 'Order ok!!!'
+          }
+        }
       }
-      const order = yield call(ordersApi, data)
-      console.log('order: ', order);
-      yield put(openLightbox(payment.code));
+      const { total, full_name, email, cart } = action.payload;
+      const payData = {
+        total,
+        full_name,
+        email,
+        cart,
+        ref: order.order_number
+      }
+      const note = yield call(orderNotesApi, noteData);
+      const payment = yield call(paymentApi, payData);
+      if(payment.ok) {
+        yield put(openLightbox(payment.code));
+      }
     } else {
       yield put(failPayment(payment));
     }
   }
 }
+/**
+ * Get products
+ */
 export function* getProducts() {
   while (true) {
     yield take(FETCH_PRODUCTS);
@@ -74,6 +93,9 @@ export function* getProducts() {
     }
   }
 }
+/**
+ * Get content
+ */
 export function* getContent() {
   while (true) {
     yield take(FETCH_CONTENT);

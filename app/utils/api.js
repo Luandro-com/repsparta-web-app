@@ -10,16 +10,15 @@ export function paymentApi(data) {
   console.log(data);
   let cart = [];
   data.cart.map((item) => {
-    const { price, name, product_id, quantity, meta} = item;
+    console.log(item);
+    const { total, price, name, product_id, quantity, meta} = item;
     cart.push({
      id: product_id,
-     subtotal: price,
-     total: price,
+     subtotal: total,
+     total: total,
      price,
      quantity,
      name,
-     product_id,
-     meta
    })
   })
   const formatedData = {
@@ -27,7 +26,6 @@ export function paymentApi(data) {
     email,
     cart
   };
-  JSON.stringify(formatedData)
   return fetch(`${apiUrl}/payment`, {
     method: 'POST',
     headers: {
@@ -96,48 +94,48 @@ export function completeOrderApi(data) {
   })
 
 }
-
+/**
+ * Orders API
+ */
 export function ordersApi(data) {
-  console.log(data);
   let cart = [];
-  data.payload.cart.map((item) => {
-    const { price, name, product_id, quantity, meta} = item;
+  data.cart.map((item) => {
+    const { product_id, variation_id, quantity, meta } = item;
+
+    let id;
+    variation_id
+      ? id = variation_id
+      : id = product_id
+
     cart.push({
-     id: product_id,
-     subtotal: price,
-     total: price,
-     price,
-     quantity,
-     name,
-     product_id,
-     meta
-   })
- });
- const { full_name, total, email } = data.payload;
- const first_name = full_name.split(' ')[0];
- const last_name = full_name.split(' ')[1];
- const formatedData = {
+       product_id: id,
+       quantity,
+       variations: {
+         [meta.key]: meta.value
+       }
+
+     })
+  });
+
+  const { full_name, total, email } = data;
+  const first_name = full_name.split(' ')[0];
+  const last_name = full_name.split(' ')[1];
+  const formatedData = {
     order: {
-     id: data.id,
-     status: 'pending',
-     total,
-     payment_details: {
-       method_id: 'pagseguro',
-       method_title: 'PagSeguro',
-       paid: false
-     },
-     billing_address: {
-       first_name,
-       last_name,
-       email,
-       country: "BR",
-       persontype: "F",
-       sex: false,
-     },
-     line_items: cart
-   }
+      payment_details: {
+        method_id: 'pagseguro',
+        method_title: 'PagSeguro',
+        paid: false
+      },
+      billing_address: {
+        first_name,
+        last_name,
+        email,
+        country: "BR",
+      },
+      line_items: cart
+    }
   }
-  console.log('BODY', formatedData);
   return fetch(`${apiUrl}/order`, {
     method: 'POST',
     headers: {
@@ -145,6 +143,27 @@ export function ordersApi(data) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(formatedData)
+  })
+  .then((res) => {
+    return res.json();
+  })
+  .catch((err) => {
+    console.log(err);
+    return err;
+  })
+}
+
+/**
+ * orderNotesApi
+ */
+export function orderNotesApi(data) {
+  return fetch(`${apiUrl}/order_notes`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
   })
   .then((res) => {
     return res.json();

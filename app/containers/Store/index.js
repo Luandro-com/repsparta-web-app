@@ -25,7 +25,6 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
   componentDidUpdate() {
     const { failPayment, changeRoute, completeOrder } = this.props;
     const { lightboxLoaded, lightboxOpen, paymentCode } = this.props.order;
-    console.log(this.props.order);
     if(lightboxLoaded && lightboxOpen) {
       // console.log('IM in', paymentCode);
       PagSeguroLightbox({
@@ -33,7 +32,7 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
       }, {
           success : (transactionCode) => {
           completeOrder({paymentCode, transactionCode});
-          // changeRoute(`/success/${transactionCode}`);
+          changeRoute(`/success/${paymentCode}/${transactionCode}`);
         },
           abort : () => {
           failPayment({ok: false, err: 'Abort'});
@@ -48,7 +47,6 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
 
   render() {
     const { products, order, startPayment, content } = this.props;
-    console.log(content);
     return (
       <div>
         <Intro description={content.description} headerImg={content.headerImg} republicas={content.republicas} />

@@ -16,7 +16,8 @@ class SuccessPage extends React.Component {
   render() {
     return (
       <div className={ styles.successPage }>
-        {this.props.params.id}
+        {this.props.params.payment}
+        {this.props.params.transaction}
       </div>
     );
   }

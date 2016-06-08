@@ -23,7 +23,6 @@ function Intro({description, headerImg, republicas}) {
   headerImg
     ? header = headerImg
     : header = Colar
-  console.log(republicas);
   return (
     <div className={ styles.wrapper }>
       <img className={ styles.colar } src={header} />
