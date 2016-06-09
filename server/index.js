@@ -160,25 +160,24 @@ app.post('/api/order', (req, res) => {
  /**
   * PAYMENT SUCCESS
   */
-app.post('/api/payment_success', (req, res) => {
+app.put('/api/payment_success', (req, res) => {
+  console.log('============================== PAYMENT SUCCESS ==============================');
   console.log(req.body);
-});
-
-/**
- * PUT Order complete API
- */
-app.put('/api/order_complete', (req, res) => {
-  const id = req.body.paymentCode;
-  const transaction_id = req.body.transactionCode
   var data = {
-    status: 'completed',
-    set_paid: true,
-    transaction_id
+    order: {
+      status: 'completed',
+      payment_details: {
+        method_id: 'pagseguro',
+        method_title: 'PagSeguro',
+        paid: true
+      },
+      transaction_id: req.body.transactionCode
+    }
   };
-  WooCommerce.put('orders/'+data, data, (error, data, wooRes) => {
-    console.log(JSON.parse(wooRes));
-    console.log('--------------------------------------------------------');
+
+  WooCommerce.put(`orders/${req.body.orderId}`, data, function(err, data, wooRes) {
     const formatedWoo = JSON.parse(wooRes);
+    console.log(formatedWoo);
     if(formatedWoo.order) {
       res.send({
         ok: true,
@@ -190,10 +189,8 @@ app.put('/api/order_complete', (req, res) => {
         ok: false
       })
     }
-
-   });
-})
-
+  });
+});
 
 // Initialize frontend middleware that will serve your JS app
 const webpackConfig = isDev

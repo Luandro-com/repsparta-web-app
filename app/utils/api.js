@@ -76,8 +76,7 @@ export function productsApi() {
 }
 
 export function completeOrderApi(data) {
-  console.log(data);
-  return fetch(`${apiUrl}/order_complete`, {
+  return fetch(`${apiUrl}/payment_success`, {
     method: 'PUT',
     headers: {
       'Accept': 'application/json',

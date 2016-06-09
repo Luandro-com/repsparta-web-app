@@ -25,6 +25,7 @@ const initialState = fromJS({
     lightboxLoaded: false,
     lightboxOpen: false,
     paymentCode: null,
+    orderId: null,
   }
 });
 function extractContent(html) {
@@ -66,7 +67,8 @@ function storeReducer(state = initialState, action) {
     case LIGHTBOX_OPEN:
       return state
         .setIn(['order', 'lightboxOpen'], true)
-        .setIn(['order', 'paymentCode'], action.payload)
+        .setIn(['order', 'paymentCode'], action.payload.paymentCode)
+        .setIn(['order', 'orderId'], action.payload.orderId)
     default:
       return state;
   }

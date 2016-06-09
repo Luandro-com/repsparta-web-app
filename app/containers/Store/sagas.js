@@ -74,7 +74,7 @@ export function* startPayment() {
       const note = yield call(orderNotesApi, noteData);
       const payment = yield call(paymentApi, payData);
       if(payment.ok) {
-        yield put(openLightbox(payment.code));
+        yield put(openLightbox(payment.code, order.order_number));
       }
     } else {
       yield put(failPayment(payment));

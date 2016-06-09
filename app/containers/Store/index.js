@@ -24,24 +24,19 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
   }
   componentDidUpdate() {
     const { failPayment, changeRoute, completeOrder } = this.props;
-    const { lightboxLoaded, lightboxOpen, paymentCode } = this.props.order;
+    const { lightboxLoaded, lightboxOpen, paymentCode, orderId } = this.props.order;
     if(lightboxLoaded && lightboxOpen) {
-      // console.log('IM in', paymentCode);
       PagSeguroLightbox({
         code: paymentCode
       }, {
           success : (transactionCode) => {
-          completeOrder({paymentCode, transactionCode});
-          changeRoute(`/success/${paymentCode}/${transactionCode}`);
+          completeOrder({ orderId, paymentCode, transactionCode });
+          // changeRoute(`/success/${paymentCode}/${transactionCode}`);
         },
           abort : () => {
           failPayment({ok: false, err: 'Abort'});
         }
       });
-      // console.log(isLightboxOpen);
-      // if (!isLightboxOpen){
-      // location.href="https://pagseguro.uol.com.br/v2/checkout/payment.html?code="+code;
-      // }
     }
   }
 

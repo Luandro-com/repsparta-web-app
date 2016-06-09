@@ -24,9 +24,9 @@ export const failPayment = (err) => ({
 export const lightboxLoaded = () => ({
   type: LIGHTBOX_LOADED
 })
-export const openLightbox = (code) => ({
+export const openLightbox = (paymentCode, orderId) => ({
   type: LIGHTBOX_OPEN,
-  payload: code
+  payload: { paymentCode, orderId }
 })
 /**
  * Order
