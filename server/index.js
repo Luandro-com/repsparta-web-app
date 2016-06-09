@@ -51,7 +51,7 @@ app.post('/api/payment', (req, res) => {
   });
   pag.currency('BRL');
   pag.setRedirectURL("http://localhost:3000/success");
-  pag.setNotificationURL("http://localhost:3000/api/payment_success");
+  pag.setNotificationURL("https://repsparta-api.luandro.com/api/pag_payment_success");
 
   pag.reference(data.ref);
   pag.buyer({
