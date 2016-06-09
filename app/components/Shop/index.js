@@ -65,7 +65,7 @@ class Shop extends React.Component {
     }
   }
 
-  changeTotal(id) {
+  returnPrice(id) {
     return this.props.products
     .filter((item) => {
       return item.id === id
@@ -76,15 +76,17 @@ class Shop extends React.Component {
   }
 
   handleCounterInc = (id) => {
+
+    const price = Number(this.returnPrice(id));
+    const product = this.props.products
+    .filter((item) => {
+      return item.id === id
+    });
+
     if(this.state[`selected${id}`] > 1 || this.state[`selected${id}`].length > 1) {
-      const product = this.props.products
-      .filter((item) => {
-        return item.id === id
-      });
       const variation = product[0].variations.filter((item) => {
         return item.attributes[0].option === this.state[`selected${id}`]
       })
-      const price = Number(this.changeTotal(id));
       if(this.state[`counter${id}`] < variation[0].stock_quantity) {
         this.setState({
           [`counter${id}`]: this.state[`counter${id}`] + 1,
@@ -92,11 +94,20 @@ class Shop extends React.Component {
           numPeople: this.state.numPeople + 1
         });
       }
+    } else {
+      if(this.state[`counter${id}`] < product[0].stock_quantity) {
+        this.setState({
+          [`counter${id}`]: this.state[`counter${id}`] + 1,
+          total: this.state.total + price,
+          numPeople: this.state.numPeople + 1
+        });
+      }
     }
+
   }
 
   handleCounterDec = (id) => {
-    const price = this.changeTotal(id);
+    const price = this.returnPrice(id);
     if(this.state[`counter${id}`] > 0) {
       this.setState({
         [`counter${id}`]: this.state[`counter${id}`] - 1,

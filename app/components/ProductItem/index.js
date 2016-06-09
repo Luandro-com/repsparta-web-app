@@ -83,7 +83,7 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
           type === 'simple' && stock_quantity > 0 &&
           <div className={ styles.simple_container }>
             <div className={ styles.simple_product }>
-              {stock_quantity} <span className={ styles.restantes}>restantes</span>
+              {stock_quantity - counter} <span className={ styles.restantes}>restantes</span>
             </div>
           </div>
         }
