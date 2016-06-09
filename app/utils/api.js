@@ -53,6 +53,17 @@ export function postsApi() {
   })
 }
 
+export function postApi(id) {
+  return fetch(`${adminUrl}/wp-json/wp/v2/posts/${id}`)
+  .then((res) => {
+    return res.json();
+  })
+  .catch((err) => {
+    console.log(err);
+    return err;
+  })
+}
+
 export function imageApi(mediaId) {
   return fetch(`${adminUrl}/wp-json/wp/v2/media/${mediaId}`)
   .then((res) => {

@@ -39,20 +39,29 @@ class Shop extends React.Component {
       open: false,
       full_name_error: false,
       email_error: false,
+      numPeople: 0
     }
   }
 
   componentDidUpdate(nextProps, nextState) {
     const { products } = this.props;
-    if(nextProps.products.length === products.length) {
+    const { numPeople } = this.state;
+    if(nextProps.products.length === products.length && nextState.numPeople === numPeople) {
       return;
-    } else {
+    } else if(nextProps.products.length !== products.length) {
       products.map((item) => {
         this.setState({
           [`selected${item.id}`]: 1,
-          [`counter${item.id}`]: 0
+          [`counter${item.id}`]: 0,
         })
       });
+    } else if (nextState.numPeople !== numPeople) {
+      for (let i = 0; i < numPeople; i++) {
+        this.setState({
+          [`formName${i+1}`]: '',
+          [`formDoc${i+1}`]: ''
+        })
+      }
     }
   }
 
@@ -79,7 +88,8 @@ class Shop extends React.Component {
       if(this.state[`counter${id}`] < variation[0].stock_quantity) {
         this.setState({
           [`counter${id}`]: this.state[`counter${id}`] + 1,
-          total: this.state.total + price
+          total: this.state.total + price,
+          numPeople: this.state.numPeople + 1
         });
       }
     }
@@ -90,7 +100,8 @@ class Shop extends React.Component {
     if(this.state[`counter${id}`] > 0) {
       this.setState({
         [`counter${id}`]: this.state[`counter${id}`] - 1,
-        total: this.state.total - price
+        total: this.state.total - price,
+        numPeople: this.state.numPeople - 1
       });
     }
   }
@@ -115,13 +126,14 @@ class Shop extends React.Component {
   handleSubmit = () => {
     const {
       total, full_name, email,
-      full_name_error, email_error, cep_error
+      full_name_error, email_error, cep_error, numPeople
     } = this.state;
     let cart = [];
     const { products, startPayment } = this.props;
     products.map((item, key) => {
       const { id, title, price, variations} = item;
       if(this.state[`counter${id}`]) {
+        // Get variations
         const variation = variations
         .filter((variation) => {
           return variation.attributes[0].option === this.state[`selected${id}`];
@@ -149,18 +161,26 @@ class Shop extends React.Component {
         })
       }
     });
+    // Get form data for each item in cart
+    let notes = 'Lista: ';
+    for (let i = 0; i < numPeople; i++) {
+      console.log(this.state[`formName${i+1}`]);
+      notes += ' <p> ' + this.state[`formName${i+1}`] + ' - ' + this.state[`formDoc${i+1}`] + '</p>'
+    }
     function checkErrors() {
       if(!full_name_error && !email_error && !(full_name.split(' ').length < 2) && !(email.split('').length < 5)) {
         return false
       }
       return true
     }
+    console.log(notes);
     if(!checkErrors()) {
       startPayment({
           total,
           full_name,
           email,
-          cart
+          cart,
+          notes
         });
     }
   }

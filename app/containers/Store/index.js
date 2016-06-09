@@ -31,7 +31,7 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
       }, {
           success : (transactionCode) => {
           completeOrder({ orderId, paymentCode, transactionCode });
-          // changeRoute(`/success/${paymentCode}/${transactionCode}`);
+          changeRoute(`/success/${paymentCode}/${transactionCode}`);
         },
           abort : () => {
           failPayment({ok: false, err: 'Abort'});

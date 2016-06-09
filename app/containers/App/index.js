@@ -23,13 +23,16 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <Style
-          scopeSelector="body"
-          rules={{
-            fontFamily: 'Roboto',
-          }}
-          />
+      <div id='react-root'>
+        <Style rules={{
+          body: {
+            fontFamily: 'Roboto'
+          },
+          'body, html, #app, #react-root': {
+            height: '100%',
+            background: '#D0021B'
+          }
+        }} />
         {this.props.children}
       </div>
     );

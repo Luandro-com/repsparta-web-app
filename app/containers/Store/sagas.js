@@ -54,12 +54,13 @@ export function* startPayment() {
   while (true) {
     const action = yield take(START_PAYMENT);
     const order = yield call(ordersApi, action.payload);
+    console.log(action.payload.notes);
     if(order.ok) {
       const noteData = {
         id: order.order_number,
         notes: {
           order_note: {
-            note: 'Order ok!!!'
+            note: action.payload.notes
           }
         }
       }

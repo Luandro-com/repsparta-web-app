@@ -56,10 +56,8 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, handleFo
       />,
     ]
   let cart = [];
-  let numPeople = 0;
   products.map((item, key) => {
     if(props[`counter${item.id}`]) {
-      numPeople = numPeople + props[`counter${item.id}`];
       cart.push(
         <TableRow key={key}>
           <TableRowColumn style={{width: '70%'}}>{item.title}</TableRowColumn>
@@ -88,7 +86,7 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, handleFo
     : loadingButton = <div></div>
 
   let formFields = []
-  for (var i = 0; i < numPeople; i++) {
+  for (var i = 0; i < props.numPeople; i++) {
     formFields.push([
       <h2>Hóspede {i+1}</h2>,
       <TextField
