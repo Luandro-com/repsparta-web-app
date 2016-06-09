@@ -36,7 +36,7 @@ const sty={
  }
 }
 
-function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products, order, props }) {
+function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, handleFormName, handleFormDoc, products, order, props }) {
   const { open, full_name, email } = props;
 
   let actions;
@@ -56,8 +56,10 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products
       />,
     ]
   let cart = [];
+  let numPeople = 0;
   products.map((item, key) => {
     if(props[`counter${item.id}`]) {
+      numPeople = numPeople + props[`counter${item.id}`];
       cart.push(
         <TableRow key={key}>
           <TableRowColumn style={{width: '70%'}}>{item.title}</TableRowColumn>
@@ -84,6 +86,36 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products
           </div>
         )
     : loadingButton = <div></div>
+
+  let formFields = []
+  for (var i = 0; i < numPeople; i++) {
+    formFields.push([
+      <h2>Hóspede {i+1}</h2>,
+      <TextField
+        style={ sty.inputMin }
+        hintText="Maria Juana"
+        floatingLabelText="Nome"
+        type="text"
+        onChange={handleFormName.bind(null, i+1)}
+        value={props[`formName${i+1}`]}
+        // onBlur={handleEmail}
+        // errorText={props.email_error ? 'Digite um email válido' : ''}
+        // errorStyle={sty.errorStyle}
+      />,
+      <TextField
+        style={ sty.inputMin }
+        hintText="12093810923"
+        floatingLabelText="RG"
+        type="text"
+        onChange={handleFormDoc.bind(null, i+1)}
+        value={props[`formDoc${i+1}`]}
+        // onBlur={handleEmail}
+        // errorText={props.email_error ? 'Digite um email válido' : ''}
+        // errorStyle={sty.errorStyle}
+      />
+    ])
+  }
+
   return (
     <div className={ styles.wrapper }>
       <Dialog
@@ -95,6 +127,7 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products
         open={props.open}
         onRequestClose={close}>
         <div style={order.loading ? {display: 'none'} : {display: 'block'}}>
+          <h1>Dados do comprador</h1>
           <TextField
             style={ sty.inputMin }
             hintText="José da Silva"
@@ -117,6 +150,8 @@ function CheckoutDialog({ close, handleSubmit, handleName, handleEmail, products
             errorText={props.email_error ? 'Digite um email válido' : ''}
             errorStyle={sty.errorStyle}
           />
+          <h1>Dados dos hóspedes</h1>
+          { formFields }
           <Table selectable={false}>
             <TableBody displayRowCheckbox={false}>
               { cart }

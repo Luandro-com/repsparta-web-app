@@ -41,11 +41,11 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { products, order, startPayment, content } = this.props;
+    const { products, order, startPayment, content, changeRoute } = this.props;
     return (
       <div>
         <Intro description={content.description} headerImg={content.headerImg} republicas={content.republicas} />
-        <Shop products={products} order={order} startPayment={startPayment} eventImg={content.eventImg} />
+        <Shop products={products} order={order} startPayment={startPayment} eventImg={content.eventImg} changeRoute={changeRoute} />
         <Footer footer={content.footer} />
       </div>
     );

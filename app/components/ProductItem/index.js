@@ -93,7 +93,7 @@ function ProductItem({description, featured_src, id, type, stock_quantity, price
             {
               variations
               .filter((item) => item.attributes[0].option === selected)
-              .map((res, key) => <span key={key} className={ styles.stock_num}>{res.stock_quantity}</span>)
+              .map((res, key) => <span key={key} className={ styles.stock_num}>{res.stock_quantity - counter}</span>)
             }
             <span className={ styles.stock_text }>disponíveis</span>
           </div>

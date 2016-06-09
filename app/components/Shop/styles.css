@@ -6,6 +6,9 @@
   padding: 0 0 100px;
   width: 100%;
 }
+h1 {
+  padding: 40px 0 30px;
+}
 .divider {
   position: relative;
   top: -10px;

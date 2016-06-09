@@ -1,0 +1,28 @@
+.wrapper {
+  background: #EC1D24;
+  padding: 80px 0;
+}
+.container  {
+  margin: 0 auto;
+  max-width: 85%;
+  background: #fff;
+  padding: 50px 20px;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  position: fixed;
+  height: 56px;
+  box-shadow: 2px 2px 2px #000;
+  z-index: 999;
+}
+.header {
+  padding: 50px 0 10px;
+}
+.finish {
+  padding: 80px 0 30px;
+}

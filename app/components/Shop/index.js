@@ -6,7 +6,6 @@
 
 import React from 'react';
 import 'whatwg-fetch';
-import CPF from 'gerador-validador-cpf';
 
 import Loader from 'halogen/SquareLoader';
 import ProductItem from 'components/ProductItem';
@@ -68,11 +67,22 @@ class Shop extends React.Component {
   }
 
   handleCounterInc = (id) => {
-    const price = Number(this.changeTotal(id));
-    this.setState({
-      [`counter${id}`]: this.state[`counter${id}`] + 1,
-      total: this.state.total + price
-    });
+    if(this.state[`selected${id}`] > 1 || this.state[`selected${id}`].length > 1) {
+      const product = this.props.products
+      .filter((item) => {
+        return item.id === id
+      });
+      const variation = product[0].variations.filter((item) => {
+        return item.attributes[0].option === this.state[`selected${id}`]
+      })
+      const price = Number(this.changeTotal(id));
+      if(this.state[`counter${id}`] < variation[0].stock_quantity) {
+        this.setState({
+          [`counter${id}`]: this.state[`counter${id}`] + 1,
+          total: this.state.total + price
+        });
+      }
+    }
   }
 
   handleCounterDec = (id) => {
@@ -193,6 +203,16 @@ class Shop extends React.Component {
       })
     }
   }
+  handleFormName = (id, e) => {
+    this.setState({
+      [`formName${id}`]: e.target.value
+    });
+  }
+  handleFormDoc = (id, e) => {
+    this.setState({
+      [`formDoc${id}`]: e.target.value
+    });
+  }
 
 
   render() {
@@ -244,7 +264,9 @@ class Shop extends React.Component {
           close={this.handleClose}
           handleSubmit={this.handleSubmit}
           handleName={this.handleName}
-          handleEmail={this.handleEmail} />
+          handleEmail={this.handleEmail}
+          handleFormName={this.handleFormName}
+          handleFormDoc={this.handleFormDoc} />
       </div>
     );
   }
