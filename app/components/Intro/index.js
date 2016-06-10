@@ -28,7 +28,11 @@ function Intro({description, headerImg, republicas}) {
       <img className={ styles.colar } src={header} />
       <div className={ styles.republicas_wrapper}>
           {republicas.map((item, key) => {
-            return <div key={key} className={ styles.republicas }><img src={item} /></div>
+            return <div key={key} className={ styles.republicas }>
+              <a href="https://www.facebook.com/Hospedagem-SMAGA-1607335222890211/">
+                <img src={item} />
+              </a>
+            </div>
           })}
       </div>
       <img className={ styles.title } src={Title} />
