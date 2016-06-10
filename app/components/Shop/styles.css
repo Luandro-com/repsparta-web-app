@@ -68,6 +68,7 @@ h1 {
 @media (min-width: 440px) {
   .event {
     top: -230px;
+    margin-bottom: -120px;
   }
   .divider {
     top: -15px;
@@ -92,6 +93,7 @@ h1 {
 @media (min-width: 1024px) {
   .event {
     top: -300px;
+    margin-bottom: -160px;
     max-width: 60%;
   }
   .divider {
@@ -101,6 +103,7 @@ h1 {
 @media (min-width: 1440px) {
   .event {
     top: -330px;
+    margin-bottom: -180px;
   }
   .divider {
     top: -33px;
@@ -109,6 +112,7 @@ h1 {
 @media (min-width: 2040px) {
   .event {
     top: -390px;
+    margin-bottom: -200px;
   }
   .divider {
     top: -60px;
