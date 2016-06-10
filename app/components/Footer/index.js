@@ -27,7 +27,7 @@ function Footer({footer}) {
       <img className={ styles.bot_divider } src={BotDivider} />
       <div className={ styles.footer }>
         <div className={ styles.footer_container }>
-          <a href="http://facebook.com">
+          <a href="https://www.facebook.com/Hospedagem-SMAGA-1607335222890211">
             <img className={ styles.facebook } src={Facebook} />
           </a>
           <span>© 2016 República Sparta</span>

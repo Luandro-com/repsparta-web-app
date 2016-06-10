@@ -19,7 +19,7 @@ import Total from './total.png';
 
 const sty = {
   finalize: {
-    margin: '5% 0 10%',
+    // margin: '5% 0 10%',
     border: '1px solid #fff',
     padding: '20px 40px',
     height: 'auto',
@@ -270,7 +270,7 @@ class Shop extends React.Component {
       )
       : ProductList = <Loader />
     total > 0
-      ? finish = <FlatButton label='Finalizar compra' style={ sty.finalize } onTouchTap={this.handleClick} />
+      ? finish = <div className={ styles.button } ><FlatButton label='Finalizar compra' style={ sty.finalize } onTouchTap={this.handleClick} /></div>
       : finish = <h1 className={ styles.addItem }>Adicione um produto no carrinho para começar</h1>
     return (
       <div className={ styles.wrapper }>

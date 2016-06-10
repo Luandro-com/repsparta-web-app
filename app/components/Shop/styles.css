@@ -56,14 +56,20 @@ h1 {
 }
 .total {
   max-width: 200px;
-  margin: 25% 0 10%;
+  /*margin: 25% 0 10%;*/
+  padding: 50px 0;
 }
 .value {
   font-size: 2em;
-  margin: 10% 0;
+  /*margin: 10% 0;*/
+  padding: 50px 0;
 }
 .addItem {
-  margin: 10% 0 30%;
+  /*margin: 10% 0 30%;*/
+  padding: 50px 0;
+}
+.button {
+  padding: 50px 0;
 }
 @media (min-width: 440px) {
   .event {
@@ -76,14 +82,11 @@ h1 {
 }
 @media (min-width: 720px) {
   .total {
-    margin: 5% 0 3%;
+    /*margin: 5% 0 3%;*/
   }
   .value {
     font-size: 2em;
     margin: 3% 0;
-  }
-  .addItem {
-    margin: 5% 0 10%;
   }
   .divider {
     top: -26px;
