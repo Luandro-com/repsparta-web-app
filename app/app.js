@@ -70,7 +70,7 @@ const history = syncHistoryWithStore(browserHistory, store, {
  */
 import { lightboxLoaded } from 'containers/Store/actions'
  const script = document.createElement('script');
- script.src = 'https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
+ script.src = 'https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.lightbox.js';
  script.onload = function () {
     console.log('PagSeguro lightbox is loaded');
     store.dispatch(lightboxLoaded())

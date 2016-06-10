@@ -175,8 +175,7 @@ class Shop extends React.Component {
     // Get form data for each item in cart
     let notes = 'Lista: ';
     for (let i = 0; i < numPeople; i++) {
-      console.log(this.state[`formName${i+1}`]);
-      notes += ' <p> ' + this.state[`formName${i+1}`] + ' - ' + this.state[`formDoc${i+1}`] + '</p>'
+      notes += ' | ' + this.state[`formName${i+1}`] + ' - ' + this.state[`formDoc${i+1}`]
     }
     function checkErrors() {
       if(!full_name_error && !email_error && !(full_name.split(' ').length < 2) && !(email.split('').length < 5)) {

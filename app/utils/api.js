@@ -7,10 +7,8 @@
 
 export function paymentApi(data) {
   const { full_name, email } = data;
-  console.log(data);
   let cart = [];
   data.cart.map((item) => {
-    console.log(item);
     const { total, price, name, product_id, quantity, meta} = item;
     cart.push({
      id: product_id,

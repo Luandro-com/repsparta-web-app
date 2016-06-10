@@ -42,7 +42,6 @@ export default [
 export function* completePayment() {
   while(true) {
     const action = yield take(SUCCESS_PAYMENT);
-    console.log(action.payload);
     const order = yield call(completeOrderApi, action.payload)
     console.log(order);
   }
@@ -54,7 +53,6 @@ export function* startPayment() {
   while (true) {
     const action = yield take(START_PAYMENT);
     const order = yield call(ordersApi, action.payload);
-    console.log(action.payload.notes);
     if(order.ok) {
       const noteData = {
         id: order.order_number,
