@@ -7,7 +7,7 @@
   width: 100%;
 }
 h1 {
-  padding: 40px 0 30px;
+  padding: 10px 0 20px;
 }
 .divider {
   position: relative;
@@ -57,7 +57,6 @@ h1 {
 .total {
   max-width: 200px;
   margin: 25% 0 10%;
-
 }
 .value {
   font-size: 2em;
@@ -83,7 +82,7 @@ h1 {
     margin: 3% 0;
   }
   .addItem {
-    margin: 10% 0 30%;
+    margin: 5% 0 10%;
   }
   .divider {
     top: -26px;
