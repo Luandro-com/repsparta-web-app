@@ -6,7 +6,7 @@
  const apiUrl = process.env.API || require('../../config').api;
 
 export function paymentApi(data) {
-  const { full_name, email } = data;
+  const { full_name, email, ref } = data;
   let cart = [];
   data.cart.map((item) => {
     const { total, price, name, product_id, quantity, meta} = item;
@@ -20,6 +20,7 @@ export function paymentApi(data) {
    })
   })
   const formatedData = {
+    ref,
     full_name,
     email,
     cart
