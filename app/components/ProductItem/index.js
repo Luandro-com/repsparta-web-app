@@ -62,7 +62,7 @@ function ProductItem({ imgLoad, imgLoaded, escription, featured_src, id, type, s
           <img
             className={imgLoaded ? '' : styles.disabled}
             src={featured_src}
-            onLoad={(e) => imgLoad('products', e)}
+            onLoad={(e) => imgLoad(e)}
             alt={title}
           />
         </div>

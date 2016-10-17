@@ -32,6 +32,7 @@ class Shop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loadedEventImg: false,
       full_name: '',
       email: '',
       total: 0,
@@ -71,7 +72,7 @@ class Shop extends React.Component {
       .map((res) => res.price);
   }
 
-  handleImageLoad = (id, key, e) => {
+  handleImageLoad = (id, e) => {
     const formatedKey = `loaded${id}Img`;
     this.setState({
       [formatedKey]: !this.state[formatedKey],
@@ -240,7 +241,7 @@ class Shop extends React.Component {
 
 
   render() {
-    const { total } = this.state;
+    const { total, loadedEventImg } = this.state;
     const { products, order, startPayment, eventImg } = this.props;
     const productList = () => {
       if (products && products.length > 0) {
@@ -257,7 +258,7 @@ class Shop extends React.Component {
                   inc={() => this.handleCounterInc(item.id)}
                   dec={() => this.handleCounterDec(item.id)}
                   change={(e, index, value) => this.handleSelectChange(item.id, e, index, value)}
-                  imgLoad={(key, e) => this.handleImageLoad(item.id, key, e)}
+                  imgLoad={(e) => this.handleImageLoad(item.id, e)}
                   imgLoaded={imgLoaded}
                   counter={counter}
                   selected={selected}
@@ -271,7 +272,16 @@ class Shop extends React.Component {
     };
     const eventImgHolder = () => {
       if (eventImg !== null) {
-        return <img height={255} alt="Evento" width={255} src={eventImg} />;
+        return (
+          <img
+            height={255}
+            alt="Evento"
+            onLoad={(e) => this.handleImageLoad('Event', e)}
+            width={255}
+            src={eventImg}
+            style={loadedEventImg ? { display: 'block' } : { display: 'none' }}
+          />
+        );
       }
       return <Loader color={'#000'} />;
     };
