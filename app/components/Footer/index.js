@@ -13,24 +13,24 @@ import BotDivider from './footer.svg';
 import Facebook from './facebook.png';
 
 function Footer({footer}) {
-  function createMarkup() { return {__html: footer}; };
+  function createMarkup() { return {__html: footer};};
   let main;
   footer !== null
     ? main = <div
-      className={ styles.text }
+      className={styles.text}
       dangerouslySetInnerHTML={createMarkup()} />
-    : main = <div className={ styles.text }><Loader /></div>
+    : main = <div className={styles.text}><Loader /></div>
   return (
-    <div className={ styles.wrapper }>
-      <img className={ styles.divider } src={Divider} />
-      { main }
-      <img className={ styles.bot_divider } src={BotDivider} />
-      <div className={ styles.footer }>
-        <div className={ styles.footer_container }>
+    <div className={styles.wrapper}>
+      <img className={styles.divider} src={Divider} />
+      {main}
+      <img className={styles.bot_divider} src={BotDivider} />
+      <div className={styles.footer}>
+        <div className={styles.footer_container}>
           <a href="https://www.facebook.com/Hospedagem-SMAGA-1607335222890211">
-            <img className={ styles.facebook } src={Facebook} />
+            <img className={styles.facebook} src={Facebook} />
           </a>
-          <span>© 2016 República Sparta</span>
+          <span>© 2017 República Sparta</span>
           <a href="http://luandro.com">
             <span>por Luandro</span>
           </a>

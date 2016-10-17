@@ -43,7 +43,10 @@
   color: #000;
 }
 .facebook {
-
+  transition: 0.5s ease-in;
+}
+.facebook:hover {
+  transform: rotateZ(30deg);
 }
 @media (min-width: 768px) {
   .bot_divider {

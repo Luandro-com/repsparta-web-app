@@ -52,14 +52,14 @@ const sty = {
   },
 };
 
-function ProductItem({ imgLoad, escription, featured_src, id, type, stock_quantity, price_html, short_description, title, variations, inc, dec, change, selected, counter }) {
+function ProductItem({ imgLoad, imgLoaded, escription, featured_src, id, type, stock_quantity, price_html, short_description, title, variations, inc, dec, change, selected, counter }) {
   const fullWidth = window.innerWidth	> 1023;
-  console.log(featured_src);
   function createMarkup() { return {__html: price_html}; };
   return (
     <div className={styles.wrapper}>
       <div className={styles.id}>
-        <img className={styles.img} src={featured_src} onLoad={(e) => imgLoad(e)} alt={title} />
+        {imgLoaded && <img className={styles.img} src={featured_src} onLoad={() => imgLoad('products')} alt={title} />}
+        {!imgLoaded && <div className={styles.placeHolder} />}
         <h4 className={styles.title}>{title}</h4>
       </div>
       <div className={styles.info}>

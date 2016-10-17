@@ -6,7 +6,6 @@
 
 import React from 'react';
 import 'whatwg-fetch';
-import capitalize from 'lodash/capitalize';
 
 import Loader from 'halogen/SquareLoader';
 import ProductItem from 'components/ProductItem';
@@ -33,8 +32,6 @@ class Shop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadedDescriptionImg: false,
-      loadedProductImg: false,
       full_name: '',
       email: '',
       total: 0,
@@ -55,6 +52,7 @@ class Shop extends React.Component {
         this.setState({
           [`selected${item.id}`]: 1,
           [`counter${item.id}`]: 0,
+          [`loaded${item.id}Img`]: false,
         });
       });
     } else if (nextState.numPeople !== numPeople) {
@@ -73,11 +71,11 @@ class Shop extends React.Component {
       .map((res) => res.price);
   }
 
-  handleImageLoad = (key) => {
-    const formatedKey = `loaded${capitalize(key)}Img`;
+  handleImageLoad = (id) => {
+    const formatedKey = `loaded${id}Img`;
     console.log('IMAGE LODEAD KEY: ', formatedKey);
     this.setState({
-      [key]: !this.state[key],
+      [formatedKey]: !this.state[formatedKey],
     });
   }
 
@@ -253,13 +251,16 @@ class Shop extends React.Component {
             {products.map((item, key) => {
               const counter = this.state[`counter${item.id}`];
               const selected = this.state[`selected${item.id}`];
+              const imgLoaded = this.state[`loaded${item.id}Img`];
               return (
                 <ProductItem
-                  key={key} {...item}
+                  key={key}
+                  {...item}
                   inc={() => this.handleCounterInc(item.id)}
                   dec={() => this.handleCounterDec(item.id)}
                   change={(e, index, value) => this.handleSelectChange(item.id, e, index, value)}
-                  imgLoad={this.handleImageLoad}
+                  imgLoad={() => this.handleImageLoad(item.id)}
+                  imgLoaded={imgLoaded}
                   counter={counter}
                   selected={selected}
                 />
