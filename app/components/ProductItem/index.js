@@ -52,22 +52,21 @@ const sty = {
   },
 };
 
-function ProductItem({ description, featured_src, id, type, stock_quantity, price_html, short_description, title, variations, inc, dec, change, selected, counter }) {
+function ProductItem({ imgLoad, escription, featured_src, id, type, stock_quantity, price_html, short_description, title, variations, inc, dec, change, selected, counter }) {
   const fullWidth = window.innerWidth	> 1023;
-  // console.log(featured_src);
+  console.log(featured_src);
   function createMarkup() { return {__html: price_html}; };
   return (
     <div className={styles.wrapper}>
       <div className={styles.id}>
-
-        <img className={styles.img} src={featured_src} alt={title} />
+        <img className={styles.img} src={featured_src} onLoad={(e) => imgLoad(e)} alt={title} />
         <h4 className={styles.title}>{title}</h4>
       </div>
       <div className={styles.info}>
         {type === 'variable' &&
           <SelectField
             value={selected}
-            onChange={change}
+            onChange={(e, index, value) => change(e, index, value)}
             iconStyle={fullWidth ? sty.iconFull : sty.icon}
             labelStyle={fullWidth ? sty.labelFull : sty.label}
             underlineStyle={sty.underline}
@@ -101,19 +100,19 @@ function ProductItem({ description, featured_src, id, type, stock_quantity, pric
           </div>
         }
         <div className={styles.counter}>
-          <span className={styles.num}>{ counter }</span>
+          <span className={styles.num}>{counter}</span>
           <div className={styles.buttons}>
-            <FlatButton backgroundColor="#EC1D24" label='+' hoverColor="#fff" style={sty.counter } onTouchTap={inc} />
-            <FlatButton backgroundColor="#FFCA05" label='-' hoverColor="#fff" style={sty.counter } onTouchTap={dec} />
+            <FlatButton backgroundColor="#EC1D24" label="+" hoverColor="#fff" style={sty.counter} onTouchTap={inc} />
+            <FlatButton backgroundColor="#FFCA05" label="-" hoverColor="#fff" style={sty.counter} onTouchTap={dec} />
           </div>
         </div>
       </div>
       <h3
-      className={styles.price }
-      dangerouslySetInnerHTML={createMarkup()}/>
+        className={styles.price}
+        dangerouslySetInnerHTML={createMarkup()}
+      />
     </div>
   );
 }
-ProductItem = Radium(ProductItem);
 
-export default ProductItem;
+export default Radium(ProductItem);

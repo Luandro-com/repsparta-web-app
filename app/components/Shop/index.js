@@ -6,7 +6,7 @@
 
 import React from 'react';
 import 'whatwg-fetch';
-// import capitalize from 'lodash/capitalize';
+import capitalize from 'lodash/capitalize';
 
 import Loader from 'halogen/SquareLoader';
 import ProductItem from 'components/ProductItem';
@@ -74,18 +74,17 @@ class Shop extends React.Component {
   }
 
   handleImageLoad = (key) => {
-    console.log('IMAGE LODEAD KEY: ', key);
-    // const formatedKey = `loaded${capitalize(key)}Img`;
-    // this.setState({
-    //   [key]: !this.state[key],
-    // });
+    const formatedKey = `loaded${capitalize(key)}Img`;
+    console.log('IMAGE LODEAD KEY: ', formatedKey);
+    this.setState({
+      [key]: !this.state[key],
+    });
   }
 
   handleCounterInc = (id) => {
     const price = Number(this.returnPrice(id));
     const product = this.props.products
       .filter((item) => item.id === id);
-    console.log('STATE', this.state[`selected${id}`]);
     if (this.state[`selected${id}`] > 1 || this.state[`selected${id}`].length > 1) {
       const variation = product[0].variations.filter((item) => item.attributes[0].option === this.state[`selected${id}`]);
       if (this.state[`counter${id}`] < variation[0].stock_quantity) {
@@ -153,13 +152,13 @@ class Shop extends React.Component {
         let meta;
         variation[0]
           ? variation_id = variation[0].id
-          : variation_id = undefined
+          : variation_id = undefined;
 
         variation[0]
           ? meta = {
-                key: variation[0].attributes[0].name,
-                value: variation[0].attributes[0].option
-              }
+            key: variation[0].attributes[0].name,
+            value: variation[0].attributes[0].option,
+          }
           : meta = [];
 
         cart.push({
@@ -176,7 +175,7 @@ class Shop extends React.Component {
     // Get form data for each item in cart
     let notes = 'Lista: ';
     for (let i = 0; i < numPeople; i++) {
-      notes += ' | ' + this.state[`formName${i+1}`] + ' - ' + this.state[`formDoc${i+1}`]
+      notes += ' | ' + this.state[`formName${i + 1}`] + ' - ' + this.state[`formDoc${i + 1}`];
     }
     function checkErrors() {
       if (!full_name_error && !email_error && !(full_name.split(' ').length < 2) && !(email.split('').length < 5)) {
@@ -197,17 +196,17 @@ class Shop extends React.Component {
   }
 
   handleName = (e) => {
-    const text = e.target.value
-    if(text.length < 2) {
+    const text = e.target.value;
+    if (text.length < 2) {
       this.setState({
         full_name_error: true,
-        full_name: text
-      })
+        full_name: text,
+      });
     } else {
       this.setState({
         full_name_error: false,
-        full_name: text
-      })
+        full_name: text,
+      });
     }
   }
   handleEmail = (e) => {
@@ -259,7 +258,7 @@ class Shop extends React.Component {
                   key={key} {...item}
                   inc={() => this.handleCounterInc(item.id)}
                   dec={() => this.handleCounterDec(item.id)}
-                  change={() => this.handleSelectChange(item.id)}
+                  change={(e, index, value) => this.handleSelectChange(item.id, e, index, value)}
                   imgLoad={this.handleImageLoad}
                   counter={counter}
                   selected={selected}
@@ -317,5 +316,9 @@ class Shop extends React.Component {
     );
   }
 }
+
+Shop.propTypes = {
+  products: React.PropTypes.arrayOf(React.PropTypes.object),
+};
 
 export default Shop;
