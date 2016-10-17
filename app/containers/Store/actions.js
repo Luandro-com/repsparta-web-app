@@ -47,14 +47,15 @@ export const fetchContent = () => ({
  });
 
 export const saveContent = (data) => ({
-   type: SAVE_CONTENT,
-   payload: {
-     headerImg: data.republicasImg,
-     republicas: data.republicas,
-     description: data.descricao ,
-     eventImg: data.descricaoImg,
-     footer: data.rodape }
- });
+  type: SAVE_CONTENT,
+  payload: {
+    logo: data.logo,
+    republicas: data.republicas,
+    description: data.descricao,
+    eventImg: data.descricaoImg,
+    footer: data.rodape,
+  },
+});
 
 /**
  * Products

@@ -126,7 +126,7 @@ export function* getContent() {
     const key = 'posts';
     yield call(getCache, key);
     const content = yield call(postsApi);
-    if (content) {
+    if (content && !content.fail) {
       const data = {};
       for (const item of content) {
         data[item.slug] = item.content.rendered;

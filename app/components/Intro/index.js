@@ -9,10 +9,10 @@ import Loader from 'halogen/PulseLoader';
 
 import styles from './styles.css';
 import Colar from './colar.png';
-import Title from './TITULO.png'
+import Title from './TITULO.png';
 // import Shields from './escudos.png';
 
-function Intro({ description, headerImg, republicas }) {
+const Intro = ({ description, logoImg, republicas }) => {
   function createMarkup() { return { __html: description }; }
   let main;
   let header;
@@ -28,7 +28,7 @@ function Intro({ description, headerImg, republicas }) {
         <Loader />
       </div>
     );
-  headerImg ? header = headerImg : header = Colar
+  logoImg ? header = logoImg : header = Colar;
   return (
     <div className={styles.wrapper}>
       <img className={styles.colar} src={header} alt="" />
@@ -45,11 +45,10 @@ function Intro({ description, headerImg, republicas }) {
       {/* <img className={styles.shields} alt="" src={Shields} /> */}
     </div>
   );
-}
+};
 
 Intro.Proptypes = {
   description: React.PropTypes.string.isRequired,
-  headerImg: React.PropTypes.string.isRequired,
   republicas: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
 };
 

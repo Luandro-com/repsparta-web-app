@@ -6,6 +6,7 @@
 
 import React from 'react';
 import 'whatwg-fetch';
+// import capitalize from 'lodash/capitalize';
 
 import Loader from 'halogen/SquareLoader';
 import ProductItem from 'components/ProductItem';
@@ -24,111 +25,110 @@ const sty = {
     padding: '20px 40px',
     height: 'auto',
     lineHeight: 'auto',
-    color: '#fff'
-
-  }
-}
+    color: '#fff',
+  },
+};
 
 class Shop extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loadedDescriptionImg: false,
+      loadedProductImg: false,
       full_name: '',
       email: '',
       total: 0,
       open: false,
       full_name_error: false,
       email_error: false,
-      numPeople: 0
-    }
+      numPeople: 0,
+    };
   }
 
   componentDidUpdate(nextProps, nextState) {
     const { products } = this.props;
     const { numPeople } = this.state;
-    if(nextProps.products.length === products.length && nextState.numPeople === numPeople) {
+    if (nextProps.products && nextProps.products.length === products.length && nextState.numPeople === numPeople) {
       return;
-    } else if(nextProps.products.length !== products.length) {
+    } else if (nextProps.products.length !== products.length) {
       products.map((item) => {
         this.setState({
           [`selected${item.id}`]: 1,
           [`counter${item.id}`]: 0,
-        })
+        });
       });
     } else if (nextState.numPeople !== numPeople) {
       for (let i = 0; i < numPeople; i++) {
         this.setState({
-          [`formName${i+1}`]: '',
-          [`formDoc${i+1}`]: ''
-        })
+          [`formName${i + 1}`]: '',
+          [`formDoc${i + 1}`]: '',
+        });
       }
     }
   }
 
   returnPrice(id) {
     return this.props.products
-    .filter((item) => {
-      return item.id === id
-    })
-    .map((res) => {
-      return res.price
-    })
+      .filter((item) => item.id === id)
+      .map((res) => res.price);
+  }
+
+  handleImageLoad = (key) => {
+    console.log('IMAGE LODEAD KEY: ', key);
+    // const formatedKey = `loaded${capitalize(key)}Img`;
+    // this.setState({
+    //   [key]: !this.state[key],
+    // });
   }
 
   handleCounterInc = (id) => {
-
     const price = Number(this.returnPrice(id));
     const product = this.props.products
-    .filter((item) => {
-      return item.id === id
-    });
-
-    if(this.state[`selected${id}`] > 1 || this.state[`selected${id}`].length > 1) {
-      const variation = product[0].variations.filter((item) => {
-        return item.attributes[0].option === this.state[`selected${id}`]
-      })
-      if(this.state[`counter${id}`] < variation[0].stock_quantity) {
+      .filter((item) => item.id === id);
+    console.log('STATE', this.state[`selected${id}`]);
+    if (this.state[`selected${id}`] > 1 || this.state[`selected${id}`].length > 1) {
+      const variation = product[0].variations.filter((item) => item.attributes[0].option === this.state[`selected${id}`]);
+      if (this.state[`counter${id}`] < variation[0].stock_quantity) {
         this.setState({
           [`counter${id}`]: this.state[`counter${id}`] + 1,
           total: this.state.total + price,
-          numPeople: this.state.numPeople + 1
+          numPeople: this.state.numPeople + 1,
         });
       }
     } else {
-      if(this.state[`counter${id}`] < product[0].stock_quantity) {
+      if (this.state[`counter${id}`] < product[0].stock_quantity) {
         this.setState({
           [`counter${id}`]: this.state[`counter${id}`] + 1,
           total: this.state.total + price,
-          numPeople: this.state.numPeople + 1
+          numPeople: this.state.numPeople + 1,
         });
       }
     }
-
   }
 
   handleCounterDec = (id) => {
     const price = this.returnPrice(id);
-    if(this.state[`counter${id}`] > 0) {
+    if (this.state[`counter${id}`] > 0) {
       this.setState({
         [`counter${id}`]: this.state[`counter${id}`] - 1,
         total: this.state.total - price,
-        numPeople: this.state.numPeople - 1
+        numPeople: this.state.numPeople - 1,
       });
     }
   }
 
   handleSelectChange = (id, e, index, value) => {
     this.setState({
-      [`selected${id}`]: value
-    })
+      [`selected${id}`]: value,
+    });
   }
 
   handleClick = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   }
 
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({ open: false });
   }
 
   /**
@@ -137,19 +137,20 @@ class Shop extends React.Component {
   handleSubmit = () => {
     const {
       total, full_name, email,
-      full_name_error, email_error, cep_error, numPeople
+      full_name_error, email_error, cep_error, numPeople,
     } = this.state;
-    let cart = [];
+    const cart = [];
     const { products, startPayment } = this.props;
     products.map((item, key) => {
-      const { id, title, price, variations} = item;
-      if(this.state[`counter${id}`]) {
+      const { id, title, price, variations } = item;
+      if (this.state[`counter${id}`]) {
         // Get variations
         const variation = variations
         .filter((variation) => {
           return variation.attributes[0].option === this.state[`selected${id}`];
         });
-        let variation_id, meta;
+        let variation_id;
+        let meta;
         variation[0]
           ? variation_id = variation[0].id
           : variation_id = undefined
@@ -169,7 +170,7 @@ class Shop extends React.Component {
           variation_id,
           quantity: this.state[`counter${id}`],
           meta,
-        })
+        });
       }
     });
     // Get form data for each item in cart
@@ -178,20 +179,20 @@ class Shop extends React.Component {
       notes += ' | ' + this.state[`formName${i+1}`] + ' - ' + this.state[`formDoc${i+1}`]
     }
     function checkErrors() {
-      if(!full_name_error && !email_error && !(full_name.split(' ').length < 2) && !(email.split('').length < 5)) {
-        return false
+      if (!full_name_error && !email_error && !(full_name.split(' ').length < 2) && !(email.split('').length < 5)) {
+        return false;
       }
-      return true
+      return true;
     }
     console.log(notes);
-    if(!checkErrors()) {
+    if (!checkErrors()) {
       startPayment({
-          total,
-          full_name,
-          email,
-          cart,
-          notes
-        });
+        total,
+        full_name,
+        email,
+        cart,
+        notes,
+      });
     }
   }
 
@@ -210,37 +211,35 @@ class Shop extends React.Component {
     }
   }
   handleEmail = (e) => {
-    const text = e.target.value
-
-    function checkemail(input){
-      var filter=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
-      if (filter.test(input))
-        return true
-      else {
-        return false
+    const text = e.target.value;
+    function checkemail(input) {
+      const filter = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+      if (filter.test(input)) {
+        return true;
       }
+      return false;
     }
     const checked = checkemail(text);
-    if(text.length < 2 || !checked) {
+    if (text.length < 2 || !checked) {
       this.setState({
         email_error: true,
-        email: text
-      })
+        email: text,
+      });
     } else {
       this.setState({
         email_error: false,
-        email: text
-      })
+        email: text,
+      });
     }
   }
   handleFormName = (id, e) => {
     this.setState({
-      [`formName${id}`]: e.target.value
+      [`formName${id}`]: e.target.value,
     });
   }
   handleFormDoc = (id, e) => {
     this.setState({
-      [`formDoc${id}`]: e.target.value
+      [`formDoc${id}`]: e.target.value,
     });
   }
 
@@ -248,55 +247,72 @@ class Shop extends React.Component {
   render() {
     const { total } = this.state;
     const { products, order, startPayment, eventImg } = this.props;
-    let ProductList, eventImgHolder, finish;
-    eventImg
-      ? eventImgHolder = <img height={255} width={255} src={eventImg} />
-      : eventImgHolder = <Loader color={'#000'} />
-    products.length > 0
-      ? ProductList = (
-        <div className={ styles.products }>
-          {products.map((item, key) => {
-            const counter = this.state[`counter${item.id}`]
-            const selected = this.state[`selected${item.id}`];
-            return <ProductItem
-              key={key} {...item}
-              inc={this.handleCounterInc.bind(null, item.id)}
-              dec={this.handleCounterDec.bind(null, item.id)}
-              change={this.handleSelectChange.bind(null, item.id)}
-              counter={counter}
-              selected={selected} />
-          })}
-        </div>
-      )
-      : ProductList = <Loader />
-    total > 0
-      ? finish = <div className={ styles.button } ><FlatButton label='Finalizar compra' style={ sty.finalize } onTouchTap={this.handleClick} /></div>
-      : finish = <h1 className={ styles.addItem }>Adicione um produto no carrinho para começar</h1>
+    const productList = () => {
+      if (products && products.length > 0) {
+        return (
+          <div className={styles.products}>
+            {products.map((item, key) => {
+              const counter = this.state[`counter${item.id}`];
+              const selected = this.state[`selected${item.id}`];
+              return (
+                <ProductItem
+                  key={key} {...item}
+                  inc={() => this.handleCounterInc(item.id)}
+                  dec={() => this.handleCounterDec(item.id)}
+                  change={() => this.handleSelectChange(item.id)}
+                  imgLoad={this.handleImageLoad}
+                  counter={counter}
+                  selected={selected}
+                />
+            );
+            })}
+          </div>
+        );
+      }
+      return <Loader color={'#000'} />;
+    };
+    const eventImgHolder = () => {
+      if (eventImg !== null) {
+        return <img height={255} alt="Evento" width={255} src={eventImg} />;
+      }
+      return <Loader color={'#000'} />;
+    };
+    const finish = () => {
+      if (total > 0) {
+        return (
+          <div className={styles.button}>
+            <FlatButton label="Finalizar compra" style={sty.finalize} onTouchTap={this.handleClick} />
+          </div>
+        );
+      }
+      return <h1 className={styles.addItem}>Adicione um produto no carrinho para começar</h1>;
+    };
     return (
-      <div className={ styles.wrapper }>
-        <img className={ styles.divider } src={Divider} />
-        <div className={ styles.event }>
-          { eventImgHolder }
+      <div className={styles.wrapper}>
+        <img className={styles.divider} src={Divider} alt="" />
+        <div className={styles.event}>
+          {eventImgHolder()}
         </div>
-        { ProductList }
-        <div className={ styles.action }>
-          <img className={ styles.total } src={Total} />
-          <hr className={ styles.line } />
-          <h2 className={ styles.value }>R${this.state.total},00</h2>
-          { finish }
-          <img className={ styles.banner} src={Action} />
+        {productList()}
+        <div className={styles.action}>
+          <img className={styles.total} src={Total} alt="" />
+          <hr className={styles.line} />
+          <h2 className={styles.value}>R${this.state.total},00</h2>
+          {finish()}
+          <img className={styles.banner} src={Action} alt="" />
         </div>
         <CheckoutDialog
           props={this.state}
           products={products}
           order={order}
-          style={{width: '100%'}}
+          style={{ width: '100%' }}
           close={this.handleClose}
           handleSubmit={this.handleSubmit}
           handleName={this.handleName}
           handleEmail={this.handleEmail}
           handleFormName={this.handleFormName}
-          handleFormDoc={this.handleFormDoc} />
+          handleFormDoc={this.handleFormDoc}
+        />
       </div>
     );
   }

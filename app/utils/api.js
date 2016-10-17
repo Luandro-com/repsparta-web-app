@@ -2,8 +2,9 @@
  * API
  */
 import 'whatwg-fetch';
-const adminUrl = process.env.ADMINURL || require('../../config').adminUrl;
-const apiUrl = process.env.API || require('../../config').api;
+import config from '../../config';
+const adminUrl = process.env.ADMINURL || config.adminUrl;
+const apiUrl = process.env.API || config.api;
 
 export function paymentApi(data) {
   const { full_name, email, ref } = data;
@@ -25,7 +26,7 @@ export function paymentApi(data) {
     email,
     cart,
   };
-  return fetch(`${apiUrl}/payment`, {
+  return fetch(`${apiUrl}/payments`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -36,7 +37,10 @@ export function paymentApi(data) {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }
 
@@ -48,7 +52,10 @@ export function postsApi() {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }
 
@@ -60,7 +67,10 @@ export function postApi(id) {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }
 
@@ -72,7 +82,10 @@ export function imageApi(mediaId) {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }
 
@@ -84,12 +97,15 @@ export function productsApi() {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }
 
 export function completeOrderApi(data) {
-  return fetch(`${apiUrl}/payment_success`, {
+  return fetch(`${apiUrl}/payments/success`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
@@ -100,7 +116,10 @@ export function completeOrderApi(data) {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }
 /**
@@ -153,7 +172,10 @@ export function ordersApi(data) {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }
 
@@ -172,6 +194,9 @@ export function orderNotesApi(data) {
   .then((res) => res.json())
   .catch((err) => {
     console.log(err);
-    return err;
+    return {
+      fail: true,
+      err,
+    };
   });
 }

@@ -26,7 +26,7 @@ export class Store extends React.Component { // eslint-disable-line react/prefer
   componentDidUpdate() {
     const { failPayment, changeRoute, completeOrder } = this.props;
     const { lightboxLoaded, lightboxOpen, paymentCode, orderId } = this.props.order;
-    if(lightboxLoaded && lightboxOpen) {
+    if (lightboxLoaded && lightboxOpen) {
       console.log('Opening lightbox for transaction: ', paymentCode);
       PagSeguroLightbox({
         code: paymentCode

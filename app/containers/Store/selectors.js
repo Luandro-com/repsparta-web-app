@@ -21,7 +21,12 @@ const selectStore = () => createSelector(
 
 const selectProducts = () => createSelector(
   selectStoreDomain(),
-  (globalState) => globalState.get('products')
+  (globalState) => {
+    if (globalState.get('products')[0] && globalState.get('products')[0].id) {
+      return globalState.get('products');
+    }
+    return globalState.get('products').toJS();
+  }
 );
 const selectOrder = () => createSelector(
   selectStoreDomain(),
