@@ -40,7 +40,16 @@ export default [
 function* getCache(key) {
   const cache = yield call(getData, key);
   if (cache !== null) {
-    yield put(saveContent(JSON.parse(cache)));
+    switch (key) {
+      case 'posts':
+        yield put(saveContent(JSON.parse(cache)));
+        break;
+      case 'products':
+        yield put(saveProducts(JSON.parse(cache)));
+        break;
+      default:
+        break;
+    }
   }
 }
 

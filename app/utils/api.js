@@ -9,16 +9,16 @@ export function paymentApi(data) {
   const { full_name, email, ref } = data;
   const cart = [];
   data.cart.map((item) => {
-    const { total, price, name, product_id, quantity, meta} = item;
+    const { total, price, name, product_id, quantity } = item;
     cart.push({
-     id: product_id,
-     subtotal: total,
-     total: total,
-     price,
-     quantity,
-     name,
-   })
-  })
+      id: product_id,
+      subtotal: total,
+      total,
+      price,
+      quantity,
+      name,
+    });
+  });
   const formatedData = {
     ref,
     full_name,
@@ -28,116 +28,8 @@ export function paymentApi(data) {
   return fetch(`${apiUrl}/payment`, {
     method: 'POST',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formatedData)
-  })
-  .then((res) => res.json())
-  .catch((err) => {
-    console.log(err);
-    return err;
-  })
-}
-export function postsApi() {
-  return fetch(`${adminUrl}/wp-json/wp/v2/posts`)
-  .then((res) => res.json())
-  .catch((err) => {
-    console.log(err);
-    return err;
-  })
-}
-
-export function postApi(id) {
-  return fetch(`${adminUrl}/wp-json/wp/v2/posts/${id}`)
-  .then((res) => res.json())
-  .catch((err) => {
-    console.log(err);
-    return err;
-  })
-}
-
-export function imageApi(mediaId) {
-  return fetch(`${adminUrl}/wp-json/wp/v2/media/${mediaId}`)
-  .then((res) => res.json())
-  .catch((err) => {
-    console.log(err);
-    return err;
-  })
-}
-
-export function productsApi() {
-  return fetch(`${apiUrl}/products`)
-  .then((res) => res.json())
-  .catch((err) => {
-    console.log(err);
-    return err;
-  })
-}
-
-export function completeOrderApi(data) {
-  return fetch(`${apiUrl}/payment_success`, {
-    method: 'PUT',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then((res) => res.json())
-  .catch((err) => {
-    console.log(err);
-    return err;
-  })
-
-}
-/**
- * Orders API
- */
-export function ordersApi(data) {
-  let cart = [];
-  data.cart.map((item) => {
-    const { product_id, variation_id, quantity, meta } = item;
-
-    let id;
-    variation_id
-      ? id = variation_id
-      : id = product_id
-
-    cart.push({
-       product_id: id,
-       quantity,
-       variations: {
-         [meta.key]: meta.value
-       }
-
-     })
-  });
-
-  const { full_name, total, email } = data;
-  const first_name = full_name.split(' ')[0];
-  const last_name = full_name.split(' ')[1];
-  const formatedData = {
-    order: {
-      payment_details: {
-        method_id: 'pagseguro',
-        method_title: 'PagSeguro',
-        paid: false
-      },
-      billing_address: {
-        first_name,
-        last_name,
-        email,
-        country: "BR",
-      },
-      line_items: cart
-    }
-  }
-  return fetch(`${apiUrl}/order`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
     },
     body: JSON.stringify(formatedData),
   })
@@ -145,17 +37,62 @@ export function ordersApi(data) {
   .catch((err) => {
     console.log(err);
     return err;
-  })
+  });
 }
 
 /**
- * orderNotesApi
+ * All Posts
  */
-export function orderNotesApi(data) {
-  return fetch(`${apiUrl}/order_notes`, {
-    method: 'POST',
+export function postsApi() {
+  return fetch(`${adminUrl}/wp-json/wp/v2/posts`)
+  .then((res) => res.json())
+  .catch((err) => {
+    console.log(err);
+    return err;
+  });
+}
+
+/**
+ * Specific posts with ID
+ */
+export function postApi(id) {
+  return fetch(`${adminUrl}/wp-json/wp/v2/posts/${id}`)
+  .then((res) => res.json())
+  .catch((err) => {
+    console.log(err);
+    return err;
+  });
+}
+
+/**
+ * Specific media with ID
+ */
+export function imageApi(mediaId) {
+  return fetch(`${adminUrl}/wp-json/wp/v2/media/${mediaId}`)
+  .then((res) => res.json())
+  .catch((err) => {
+    console.log(err);
+    return err;
+  });
+}
+
+/**
+ * All products
+ */
+export function productsApi() {
+  return fetch(`${apiUrl}/products`)
+  .then((res) => res.json())
+  .catch((err) => {
+    console.log(err);
+    return err;
+  });
+}
+
+export function completeOrderApi(data) {
+  return fetch(`${apiUrl}/payment_success`, {
+    method: 'PUT',
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
@@ -164,5 +101,77 @@ export function orderNotesApi(data) {
   .catch((err) => {
     console.log(err);
     return err;
+  });
+}
+/**
+ * Orders API
+ */
+export function ordersApi(data) {
+  const cart = [];
+  data.cart.map((item) => {
+    const { product_id, variation_id, quantity, meta } = item;
+    let id;
+    variation_id ? id = variation_id : id = product_id;
+
+    cart.push({
+      product_id: id,
+      quantity,
+      variations: {
+        [meta.key]: meta.value,
+      },
+    });
+  });
+
+  const { full_name, email } = data;
+  const first_name = full_name.split(' ')[0];
+  const last_name = full_name.split(' ')[1];
+  const formatedData = {
+    order: {
+      payment_details: {
+        method_id: 'pagseguro',
+        method_title: 'PagSeguro',
+        paid: false,
+      },
+      billing_address: {
+        first_name,
+        last_name,
+        email,
+        country: 'BR',
+      },
+      line_items: cart,
+    },
+  };
+
+  return fetch(`${apiUrl}/orders`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formatedData),
   })
+  .then((res) => res.json())
+  .catch((err) => {
+    console.log(err);
+    return err;
+  });
+}
+
+/**
+ * orderNotesApi
+ */
+export function orderNotesApi(data) {
+  return fetch(`${apiUrl}/orders/notes`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then((res) => res.json())
+  .catch((err) => {
+    console.log(err);
+    return err;
+  });
 }
