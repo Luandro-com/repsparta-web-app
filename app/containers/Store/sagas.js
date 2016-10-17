@@ -1,23 +1,21 @@
+import { getData, saveData } from 'utils/localStorage';
+
 import {
   FETCH_PRODUCTS,
   FETCH_CONTENT,
-  CREATE_ORDER,
   START_PAYMENT,
-  FAIL_PAYMENT,
-  SUCCESS_PAYMENT
+  SUCCESS_PAYMENT,
 } from './constants';
 import {
   take,
   call,
   put,
-  select,
-  cps
 } from 'redux-saga/effects';
 import {
   saveProducts,
   saveContent,
   failPayment,
-  openLightbox
+  openLightbox,
 } from './actions';
 import {
   orderNotesApi,
@@ -26,23 +24,37 @@ import {
   productsApi,
   postsApi,
   imageApi,
-  completeOrderApi
+  completeOrderApi,
 } from '../../utils/api';
 // All sagas to be loaded
 export default [
   getProducts,
   getContent,
   startPayment,
-  completePayment
+  completePayment,
 ];
+
+/**
+ * Helpers
+ */
+function* getCache(key) {
+  const cache = yield call(getData, key);
+  if (cache !== null) {
+    yield put(saveContent(JSON.parse(cache)));
+  }
+}
+
+function* setCache(key, data) {
+  yield call(saveData, key, JSON.stringify(data));
+}
 
 /**
  * Complete payment
  */
 export function* completePayment() {
-  while(true) {
+  while (true) {
     const action = yield take(SUCCESS_PAYMENT);
-    const order = yield call(completeOrderApi, action.payload)
+    const order = yield call(completeOrderApi, action.payload);
     console.log(order);
   }
 }
@@ -53,30 +65,30 @@ export function* startPayment() {
   while (true) {
     const action = yield take(START_PAYMENT);
     const order = yield call(ordersApi, action.payload);
-    if(order.ok) {
+    if (order.ok) {
       const noteData = {
         id: order.order_number,
         notes: {
           order_note: {
-            note: action.payload.notes
-          }
-        }
-      }
+            note: action.payload.notes,
+          },
+        },
+      };
       const { total, full_name, email, cart } = action.payload;
       const payData = {
         total,
         full_name,
         email,
         cart,
-        ref: order.order_number
-      }
-      const note = yield call(orderNotesApi, noteData);
+        ref: order.order_number,
+      };
+      yield call(orderNotesApi, noteData);
       const payment = yield call(paymentApi, payData);
-      if(payment.ok) {
+      if (payment.ok) {
         yield put(openLightbox(payment.code, order.order_number));
       }
     } else {
-      yield put(failPayment(payment));
+      yield put(failPayment());
     }
   }
 }
@@ -86,9 +98,13 @@ export function* startPayment() {
 export function* getProducts() {
   while (true) {
     yield take(FETCH_PRODUCTS);
+    const key = 'products';
+    yield call(getCache, key);
     const products = yield call(productsApi);
-    if (products.products.length > 0) {
-      yield put(saveProducts(products.products));
+    const data = products.products;
+    if (data && data.length > 0) {
+      yield call(setCache, key, data);
+      yield put(saveProducts(data));
     }
   }
 }
@@ -98,18 +114,21 @@ export function* getProducts() {
 export function* getContent() {
   while (true) {
     yield take(FETCH_CONTENT);
+    const key = 'posts';
+    yield call(getCache, key);
     const content = yield call(postsApi);
     if (content) {
-      let data = {};
-      for(let item of content) {
+      const data = {};
+      for (const item of content) {
         data[item.slug] = item.content.rendered;
-        if(item.featured_media) {
-            const img = yield call(imageApi, item.featured_media);
-            if (img) {
-              data[`${item.slug}Img`] = img.source_url;
-            }
+        if (item.featured_media) {
+          const img = yield call(imageApi, item.featured_media);
+          if (img) {
+            data[`${item.slug}Img`] = img.source_url;
+          }
         }
       }
+      yield call(setCache, key, data);
       yield put(saveContent(data));
     }
   }

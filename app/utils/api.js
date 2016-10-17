@@ -1,13 +1,13 @@
 /**
  * API
  */
- import 'whatwg-fetch';
- const adminUrl = process.env.ADMINURL || require('../../config').adminUrl;
- const apiUrl = process.env.API || require('../../config').api;
+import 'whatwg-fetch';
+const adminUrl = process.env.ADMINURL || require('../../config').adminUrl;
+const apiUrl = process.env.API || require('../../config').api;
 
 export function paymentApi(data) {
   const { full_name, email, ref } = data;
-  let cart = [];
+  const cart = [];
   data.cart.map((item) => {
     const { total, price, name, product_id, quantity, meta} = item;
     cart.push({
@@ -23,19 +23,17 @@ export function paymentApi(data) {
     ref,
     full_name,
     email,
-    cart
+    cart,
   };
   return fetch(`${apiUrl}/payment`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(formatedData)
   })
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;
@@ -43,9 +41,7 @@ export function paymentApi(data) {
 }
 export function postsApi() {
   return fetch(`${adminUrl}/wp-json/wp/v2/posts`)
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;
@@ -54,9 +50,7 @@ export function postsApi() {
 
 export function postApi(id) {
   return fetch(`${adminUrl}/wp-json/wp/v2/posts/${id}`)
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;
@@ -65,9 +59,7 @@ export function postApi(id) {
 
 export function imageApi(mediaId) {
   return fetch(`${adminUrl}/wp-json/wp/v2/media/${mediaId}`)
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;
@@ -76,9 +68,7 @@ export function imageApi(mediaId) {
 
 export function productsApi() {
   return fetch(`${apiUrl}/products`)
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;
@@ -94,9 +84,7 @@ export function completeOrderApi(data) {
     },
     body: JSON.stringify(data)
   })
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;
@@ -151,11 +139,9 @@ export function ordersApi(data) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(formatedData)
+    body: JSON.stringify(formatedData),
   })
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;
@@ -170,13 +156,11 @@ export function orderNotesApi(data) {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   })
-  .then((res) => {
-    return res.json();
-  })
+  .then((res) => res.json())
   .catch((err) => {
     console.log(err);
     return err;

@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import Radium, { Style } from 'radium'
+import Radium, { Style } from 'radium';
 
 /* eslint-disable react/prefer-stateless-function */
 class App extends React.Component {
@@ -23,16 +23,18 @@ class App extends React.Component {
 
   render() {
     return (
-      <div id='react-root'>
-        <Style rules={{
-          body: {
-            fontFamily: 'Roboto'
-          },
-          'body, html, #app, #react-root': {
-            height: '100%',
-            background: '#D0021B'
-          }
-        }} />
+      <div id="react-root">
+        <Style
+          rules={{
+            body: {
+              fontFamily: 'Roboto',
+            },
+            'body, html, #app, #react-root': {
+              height: '100%',
+              background: '#D0021B',
+            },
+          }}
+        />
         {this.props.children}
       </div>
     );
