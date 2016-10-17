@@ -71,9 +71,8 @@ class Shop extends React.Component {
       .map((res) => res.price);
   }
 
-  handleImageLoad = (id) => {
+  handleImageLoad = (id, key, e) => {
     const formatedKey = `loaded${id}Img`;
-    console.log('IMAGE LODEAD KEY: ', formatedKey);
     this.setState({
       [formatedKey]: !this.state[formatedKey],
     });
@@ -181,7 +180,6 @@ class Shop extends React.Component {
       }
       return true;
     }
-    console.log(notes);
     if (!checkErrors()) {
       startPayment({
         total,
@@ -259,7 +257,7 @@ class Shop extends React.Component {
                   inc={() => this.handleCounterInc(item.id)}
                   dec={() => this.handleCounterDec(item.id)}
                   change={(e, index, value) => this.handleSelectChange(item.id, e, index, value)}
-                  imgLoad={() => this.handleImageLoad(item.id)}
+                  imgLoad={(key, e) => this.handleImageLoad(item.id, key, e)}
                   imgLoaded={imgLoaded}
                   counter={counter}
                   selected={selected}
