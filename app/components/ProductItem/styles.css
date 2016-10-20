@@ -12,6 +12,11 @@
   margin-right: 10px;
 }
 
+.img img {
+  height: 80px;
+  width: 80px;
+}
+
 .placeHolder {
   margin-right: 10px;
   width: 50px;
